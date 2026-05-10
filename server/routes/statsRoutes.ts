@@ -1,20 +1,15 @@
-import { Router } from "express";
-import { statsService } from "../services/statsService";
+import { Router, Request, Response } from 'express';
+import { statsService } from '../services/statsService';
+import { ok, fail } from '../utils/response';
 
 const router = Router();
 
-router.get("/stats", async (req, res) => {
+router.get('/stats', async (_req: Request, res: Response) => {
   try {
-    const stats = await statsService.getDashboardStats();
-    res.json({
-      success: true,
-      data: stats
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: "Failed to fetch dashboard stats"
-    });
+    const stats = await statsService.getStats();
+    res.json(ok(stats, 'Dashboard stats fetched successfully'));
+  } catch {
+    res.status(500).json(fail('Failed to fetch dashboard stats'));
   }
 });
 

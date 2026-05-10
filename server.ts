@@ -3,6 +3,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { fileURLToPath } from "url";
 import apiRoutes from "./server/routes";
+import { errorHandler } from "./server/middleware/errorHandler";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -15,6 +16,9 @@ async function startServer() {
 
   // Modular API Routes
   app.use("/api", apiRoutes);
+
+  // Global error handler (must be last)
+  app.use(errorHandler);
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

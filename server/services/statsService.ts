@@ -1,17 +1,23 @@
-import { DashboardStats } from "../types/models";
+import { DashboardStats } from '../types/models';
+import { supplierService } from './supplierService';
+import { productService } from './productService';
+import { purchaseRequestService } from './purchaseRequestService';
+import { leadService } from './leadService';
+import { customerService } from './customerService';
+import { dealService } from './dealService';
+import { activityService } from './activityService';
 
 class StatsService {
-  async getDashboardStats(): Promise<DashboardStats> {
-    // In a real app, this would query a database
-    // For now, returning mock data to maintain existing functionality
+  async getStats(): Promise<DashboardStats> {
     return {
-      totalSuppliers: 24,
-      totalProducts: 142,
-      lowStockItems: 5,
-      totalLeads: 89,
-      totalCustomers: 56,
-      openDeals: 12,
-      revenue: 102456
+      totalSuppliers: supplierService.count(),
+      totalProducts: productService.count(),
+      lowStockItems: productService.getLowStockCount(),
+      openPurchaseRequests: purchaseRequestService.countOpen(),
+      totalLeads: leadService.count(),
+      totalCustomers: customerService.count(),
+      openDeals: dealService.countOpen(),
+      recentActivities: activityService.recentCount(),
     };
   }
 }
