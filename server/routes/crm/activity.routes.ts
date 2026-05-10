@@ -5,8 +5,12 @@ import { ok, fail } from '../../utils/response';
 const router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  const { relatedEntity, relatedEntityId } = req.query;
-  const data = await activityService.getAll(relatedEntity as string, relatedEntityId as string);
+  const { relatedEntity, relatedEntityId, type } = req.query;
+  const data = await activityService.getAll(
+    relatedEntity as string,
+    relatedEntityId as string,
+    type as string,
+  );
   res.json(ok(data, 'Activities fetched successfully', { total: data.length }));
 });
 

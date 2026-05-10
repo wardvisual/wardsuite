@@ -22,6 +22,8 @@ export interface Supplier {
   address: string;
   status: 'active' | 'inactive';
   notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Product {
@@ -35,6 +37,8 @@ export interface Product {
   currentStock: number;
   reorderLevel: number;
   status: 'active' | 'discontinued';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Lead {
@@ -48,6 +52,8 @@ export interface Lead {
   status: 'new' | 'contacted' | 'qualified' | 'proposal' | 'won' | 'lost';
   assignedUserId: string;
   notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Customer {
@@ -60,6 +66,8 @@ export interface Customer {
   address: string;
   accountManagerId: string;
   status: 'active' | 'inactive';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Deal {
@@ -73,25 +81,37 @@ export interface Deal {
   ownerId: string;
   expectedCloseDate: string;
   notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Activity {
+  id: string;
+  relatedEntity: string;
+  relatedEntityId: string;
+  type: 'call' | 'meeting' | 'note' | 'email' | 'audit';
+  description: string;
+  createdBy: string;
+  createdAt: string;
 }
 
 export interface DashboardStats {
   totalSuppliers: number;
   totalProducts: number;
   lowStockItems: number;
+  openPurchaseRequests: number;
   totalLeads: number;
   totalCustomers: number;
   openDeals: number;
-  revenue: number;
+  recentActivities: number;
 }
 
-export interface AuditLog {
-  id: string;
-  entityType: string;
-  entityId: string;
-  action: 'create' | 'update' | 'delete' | 'login';
-  userId: string;
-  userName: string;
-  timestamp: any;
-  details: string;
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  meta?: { total?: number };
 }
+
+export type LeadStatus = Lead['status'];
+export type ActivityType = Activity['type'];

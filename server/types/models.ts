@@ -62,7 +62,7 @@ export interface Activity {
   id: string;
   relatedEntity: string;
   relatedEntityId: string;
-  type: 'call' | 'meeting' | 'note' | 'email';
+  type: 'call' | 'meeting' | 'note' | 'email' | 'audit';
   description: string;
   createdBy: string;
   createdAt: string;
