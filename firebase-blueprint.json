@@ -1,0 +1,128 @@
+{
+  "entities": {
+    "Supplier": {
+      "title": "Supplier",
+      "description": "An external supply partner.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "contactPerson": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "notes": { "type": "string" }
+      },
+      "required": ["code", "name", "email", "status"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "An inventory item.",
+      "type": "object",
+      "properties": {
+        "sku": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "unit": { "type": "string" },
+        "costPrice": { "type": "number" },
+        "sellingPrice": { "type": "number" },
+        "currentStock": { "type": "number" },
+        "reorderLevel": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "discontinued"] }
+      },
+      "required": ["sku", "name", "category", "status"]
+    },
+    "Lead": {
+      "title": "Lead",
+      "description": "A potential customer prospect.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "fullName": { "type": "string" },
+        "company": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "source": { "type": "string" },
+        "status": { "type": "string", "enum": ["new", "contacted", "qualified", "proposal", "won", "lost"] },
+        "assignedUserId": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["code", "fullName", "company", "status"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "A converted business account.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "name": { "type": "string" },
+        "company": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "address": { "type": "string" },
+        "accountManagerId": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] }
+      },
+      "required": ["code", "name", "company", "status"]
+    },
+    "Deal": {
+      "title": "Deal",
+      "description": "A sales opportunity pipeline entry.",
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "title": { "type": "string" },
+        "customerId": { "type": "string" },
+        "leadId": { "type": "string" },
+        "amount": { "type": "number" },
+        "stage": { "type": "string", "enum": ["open", "negotiation", "proposal", "won", "lost"] },
+        "ownerId": { "type": "string" },
+        "expectedCloseDate": { "type": "string" },
+        "notes": { "type": "string" }
+      },
+      "required": ["code", "title", "customerId", "amount", "stage"]
+    },
+    "AuditLog": {
+      "title": "Audit Log",
+      "description": "A record of system events.",
+      "type": "object",
+      "properties": {
+        "entityType": { "type": "string" },
+        "entityId": { "type": "string" },
+        "action": { "type": "string", "enum": ["create", "update", "delete", "login"] },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "details": { "type": "string" },
+        "timestamp": { "type": "string" }
+      },
+      "required": ["entityType", "entityId", "action", "userId", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/suppliers/{supplierId}": {
+      "schema": "Supplier",
+      "description": "Supplier master records"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Inventory products"
+    },
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "CRM leads"
+    },
+    "/customers/{customerId}": {
+      "schema": "Customer",
+      "description": "Customer accounts"
+    },
+    "/deals/{dealId}": {
+      "schema": "Deal",
+      "description": "Sales opportunities"
+    },
+    "/audit_logs/{logId}": {
+      "schema": "AuditLog",
+      "description": "System event logs"
+    }
+  }
+}
