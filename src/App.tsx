@@ -56,22 +56,22 @@ const Dashboard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="p-6 bg-white border border-[#f1f1f1] rounded-2xl shadow-sm space-y-4"
+            className="p-6 floating-card space-y-4"
           >
              <div className="flex justify-between items-start">
-               <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">{stat.label}</span>
-               <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center border border-[#f1f1f1]">
-                 <stat.icon className="w-4 h-4 text-black" />
+               <span className="text-[10px] font-bold text-[#bbbbbb] uppercase tracking-[0.2em]">{stat.label}</span>
+               <div className="w-14 h-14 rounded-full bg-[#f5f5f5] flex items-center justify-center border border-white">
+                 <stat.icon className="w-6 h-6 text-black" />
                </div>
              </div>
              <div>
-               <h3 className="text-[42px] font-light tracking-tight leading-tight">{stat.value}</h3>
-               <div className="flex items-center gap-1 mt-2">
-                 <span className="text-[11px] font-bold text-[#111111] bg-gray-100 px-1.5 py-0.5 rounded-md flex items-center gap-0.5">
+               <h3 className="text-[44px] font-bold tracking-tight leading-tight mb-2">{stat.value}</h3>
+               <div className="flex items-center gap-2">
+                 <span className="text-[11px] font-bold text-[#111111] bg-[#f5f5f5] px-3 py-1 rounded-full flex items-center gap-1">
                    <TrendingUp className="w-3 h-3" />
                    {stat.change}
                  </span>
-                 <span className="text-[11px] text-[#6b7280] font-medium uppercase tracking-tight">vs last month</span>
+                 <span className="text-[11px] text-[#cccccc] font-bold uppercase tracking-widest ml-1">vs last month</span>
                </div>
              </div>
           </motion.div>
@@ -79,7 +79,7 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-8 bg-white border border-[#f1f1f1] rounded-2xl p-8 space-y-8 shadow-sm">
+        <div className="col-span-8 floating-card p-8 space-y-8">
            <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                  <TrendingUp className="w-5 h-5" />
@@ -96,24 +96,24 @@ const Dashboard = () => {
               <div className="absolute inset-x-0 bottom-0 top-10 flex items-end justify-between px-2">
                  {[30, 45, 35, 55, 40, 65, 50, 75, 45, 80, 60, 90].map((h, i) => (
                    <div key={i} className="w-[6%] bg-black/5 rounded-t-lg transition-all hover:bg-black/10 group relative" style={{ height: h + '%' }}>
-                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                          ${h}k
                       </div>
                    </div>
                  ))}
               </div>
               <div className="absolute left-0 inset-y-0 w-10 flex flex-col justify-between py-2 text-[10px] font-bold text-[#6b7280] uppercase opacity-50">
-                <span>$10k</span>
-                <span>$7.5k</span>
-                <span>$5k</span>
-                <span>$2.5k</span>
-                <span>0</span>
+                 <span>$10k</span>
+                 <span>$7.5k</span>
+                 <span>$5k</span>
+                 <span>$2.5k</span>
+                 <span>0</span>
               </div>
            </div>
         </div>
 
         <div className="col-span-4 space-y-8 flex flex-col">
-          <div className="bg-white border border-[#f1f1f1] rounded-2xl p-8 flex-1 shadow-sm relative overflow-hidden">
+          <div className="floating-card p-8 flex-1 relative overflow-hidden">
              <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                    <Calendar className="w-5 h-5" />
@@ -129,17 +129,17 @@ const Dashboard = () => {
                 ].map((item, i) => (
                   <div key={i} className="flex items-center justify-between group">
                     <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-gray-50 border border-[#f1f1f1] flex items-center justify-center font-bold text-[#6b7280]">
+                      <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-[#f8f8f8] flex items-center justify-center font-bold text-[#6b7280]">
                          {item.initial}
                       </div>
                       <div>
                         <p className="text-sm font-bold">{item.name}</p>
-                        <p className="text-[10px] text-[#6b7280] font-bold uppercase tracking-widest">{item.handle}</p>
+                        <p className="text-[10px] text-[#9ca3af] font-bold uppercase tracking-widest">{item.handle}</p>
                       </div>
                     </div>
                     <div className="text-right">
                        <p className="text-sm font-bold">{item.amount}</p>
-                       <span className="text-[9px] font-black uppercase text-[#6b7280] tracking-tighter bg-gray-100 px-1.5 py-0.5 rounded">
+                       <span className="text-[9px] font-black uppercase text-[#6b7280] tracking-tighter bg-gray-50 px-2 py-1 rounded-full">
                          {item.status}
                        </span>
                     </div>
@@ -147,7 +147,7 @@ const Dashboard = () => {
                 ))}
              </div>
 
-             <button className="w-full mt-12 py-3 bg-[#f9fafb] border border-[#f1f1f1] rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors">
+             <button className="w-full mt-12 py-3 bg-gray-50 border border-[#f1f1f1] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors">
                 Audit Full Pipeline
                 <ArrowUpRight className="w-4 h-4 opacity-50" />
              </button>

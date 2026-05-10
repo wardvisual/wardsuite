@@ -47,7 +47,7 @@ export function LeadKanban({ leads, onLeadClick, onStatusChange }: LeadKanbanPro
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
                     onClick={() => onLeadClick(lead)}
-                    className="p-5 bg-white border border-[#f1f1f1] rounded-[24px] shadow-sm hover:shadow-md transition-shadow cursor-pointer group relative overflow-hidden"
+                    className="p-5 bg-white border border-[#f8f8f8] rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all cursor-pointer group relative overflow-hidden"
                   >
                     <div className="space-y-4">
                       <div className="flex justify-between items-start">

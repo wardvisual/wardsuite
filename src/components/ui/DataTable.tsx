@@ -55,10 +55,10 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="bg-white border border-[#f1f1f1] rounded-2xl overflow-hidden shadow-[var(--shadow-subtle)]">
+      <div className="bg-white border border-[#f8f8f8] rounded-[32px] overflow-hidden shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
-            <thead className="bg-[#f9fafb] border-b border-[#f1f1f1]">
+            <thead className="bg-gray-50/50 border-b border-[#f1f1f1]">
               {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header) => (

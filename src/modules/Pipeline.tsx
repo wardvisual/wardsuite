@@ -114,7 +114,7 @@ export default function Pipeline() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 + j * 0.05 }}
                   onClick={() => handleEdit(deal)}
-                  className="p-5 bg-white border border-[#f1f1f1] rounded-[24px] shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+                  className="p-5 bg-white border border-[#f8f8f8] rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all cursor-pointer group"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <p className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">{deal.customer}</p>
