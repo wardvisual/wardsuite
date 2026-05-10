@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Plus, Search, Filter, RefreshCw, UserPlus, Phone, Mail, Edit2, Trash2, Loader2, Link2, Building, Hash, LayoutGrid, List, Download, Upload, Printer } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { Plus, Search, Filter, RefreshCw, UserPlus, Phone, Mail, Edit2, Trash2, Loader2, Link2, Building, Hash, LayoutGrid, List, Download, Upload, Printer, FileText } from 'lucide-react';
+import { useDropzone } from 'react-dropzone';
 import { Lead } from '@/src/types';
 import { cn } from '@/src/lib/utils';
 import { DataTable } from '@/src/components/ui/DataTable';
@@ -18,8 +19,9 @@ const MOCK_LEADS: Lead[] = [
 export default function Leads() {
   const [leads, setLeads] = useState<Lead[]>(MOCK_LEADS);
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table');
+  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('kanban');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isImportDrawerOpen, setIsImportDrawerOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isMapperOpen, setIsMapperOpen] = useState(false);
   const [csvData, setCsvData] = useState<{ headers: string[], rows: string[][] }>({ headers: [], rows: [] });
@@ -194,10 +196,9 @@ export default function Leads() {
           <button onClick={exportCSV} title="Export CSV" className="btn-secondary px-4">
              <Download className="w-4 h-4" />
           </button>
-          <label className="btn-secondary px-4 cursor-pointer">
-             <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
+          <button onClick={() => setIsImportDrawerOpen(true)} className="btn-secondary px-4">
              <Upload className="w-4 h-4" />
-          </label>
+          </button>
           
           <button 
             onClick={() => { setSelectedLead(null); setFormData({ status: 'new' }); setIsDrawerOpen(true); }}
@@ -317,6 +318,84 @@ export default function Leads() {
         csvRows={csvData.rows}
         onImport={handleImportFinalized}
       />
+
+      <ImportDrawer 
+        isOpen={isImportDrawerOpen}
+        onClose={() => setIsImportDrawerOpen(false)}
+        onFileProcess={(headers, rows) => {
+          setCsvData({ headers, rows });
+          setIsImportDrawerOpen(false);
+          setIsMapperOpen(true);
+        }}
+      />
     </div>
+  );
+}
+
+function ImportDrawer({ isOpen, onClose, onFileProcess }: { isOpen: boolean, onClose: () => void, onFileProcess: (h: string[], r: string[][]) => void }) {
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      const lines = text.split('\n').filter(l => l.trim());
+      if (lines.length === 0) return;
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = lines.slice(1).map(l => l.split(',').map(c => c.trim()));
+      onFileProcess(headers, rows);
+    };
+    reader.readAsText(file);
+  }, [onFileProcess]);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
+    onDrop,
+    accept: { 'text/csv': ['.csv'] },
+    multiple: false 
+  });
+
+  return (
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Secure Data Import"
+    >
+      <div className="p-8 space-y-8">
+        <div className="space-y-2">
+          <h3 className="text-xl font-black tracking-tight text-black">Protocol Node: CSV Upload</h3>
+          <p className="text-sm font-medium text-[#6b7280]">Initialize lead ingestion by providing a valid dataset.</p>
+        </div>
+
+        <div 
+          {...getRootProps()} 
+          className={cn(
+            "h-80 rounded-[32px] border-2 border-dashed flex flex-col items-center justify-center gap-6 transition-all cursor-pointer",
+            isDragActive ? "border-black bg-gray-50 bg-opacity-50" : "border-[#eeeeee] hover:border-[#bbbbbb] bg-[#fcfcfc]"
+          )}
+        >
+          <input {...getInputProps()} />
+          <div className="w-20 h-20 rounded-[24px] bg-white shadow-xl shadow-black/5 border border-[#f8f8f8] flex items-center justify-center">
+            <FileText className={cn("w-10 h-10 transition-all", isDragActive ? "text-black scale-110" : "text-[#bbbbbb]")} />
+          </div>
+          <div className="text-center space-y-1">
+             <p className="text-sm font-black text-black uppercase tracking-widest leading-none">
+               {isDragActive ? 'Release Payload' : 'Drag & Drop CSV'}
+             </p>
+             <p className="text-[10px] font-bold text-[#bbbbbb] uppercase tracking-widest">or click to browse filesystem</p>
+          </div>
+        </div>
+
+        <div className="p-6 bg-blue-50/50 border border-blue-100 rounded-2xl flex gap-4">
+           <Loader2 className="w-5 h-5 text-blue-600 shrink-0" />
+           <div className="space-y-1">
+              <p className="text-xs font-black text-blue-900 uppercase tracking-widest leading-none">Data Normalization</p>
+              <p className="text-xs font-medium text-blue-800 leading-relaxed">
+                Our parsing engine will automatically detect column structures. You will be prompted to map fields in the next sequence.
+              </p>
+           </div>
+        </div>
+      </div>
+    </Drawer>
   );
 }

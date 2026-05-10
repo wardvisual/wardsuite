@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Layout, Filter, ArrowUpRight, Search, Target, DollarSign, Calendar, ChevronRight, Edit2, Trash2, User, Building, Hash } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { Drawer, ConfirmDialog } from '@/src/components/ui/Modals';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
 
 interface Deal {
   id: string;
@@ -45,6 +46,15 @@ export default function Pipeline() {
     setSelectedDeal(deal);
     setFormData(deal);
     setIsDrawerOpen(true);
+  };
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+
+    setDeals(deals.map(d => d.id === draggableId ? { ...d, stage: destination.droppableId } : d));
   };
 
   const handleDelete = () => {
@@ -92,56 +102,80 @@ export default function Pipeline() {
         </div>
       </div>
 
-      <div className="flex gap-6 overflow-x-auto pb-8 min-h-[600px]">
-        {STAGES.map((stage, i) => (
-          <div key={stage.id} className="flex-1 min-w-[320px] space-y-6">
-            <div className="flex items-center justify-between px-2">
-              <div className="flex items-center gap-3">
-                <div className={cn("w-2 h-2 rounded-full", stage.color)} />
-                <h3 className="font-bold text-[#111111]">{stage.name}</h3>
-                <span className="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold text-[#6b7280]">
-                  {getStageDeals(stage.id).length}
-                </span>
-              </div>
-              <p className="text-xs font-bold text-[#6b7280] tabular-nums">${(getStageTotal(stage.id) / 1000).toFixed(1)}k</p>
-            </div>
-
-            <div className="space-y-4">
-              {getStageDeals(stage.id).map((deal, j) => (
-                <motion.div
-                  key={deal.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 + j * 0.05 }}
-                  onClick={() => handleEdit(deal)}
-                  className="p-5 bg-white border border-[#f8f8f8] rounded-[24px] shadow-[0_10px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] transition-all cursor-pointer group"
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <p className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">{deal.customer}</p>
-                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex gap-6 overflow-x-auto pb-8 min-h-[600px]">
+          {STAGES.map((stage) => {
+            const stageDeals = getStageDeals(stage.id);
+            
+            return (
+              <div key={stage.id} className="flex-1 min-w-[320px] flex flex-col gap-6">
+                <div className="flex items-center justify-between px-2 shrink-0">
+                  <div className="flex items-center gap-3">
+                    <div className={cn("w-2 h-2 rounded-full", stage.color)} />
+                    <h3 className="font-bold text-[#111111]">{stage.name}</h3>
+                    <span className="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded-full font-bold text-[#6b7280]">
+                      {stageDeals.length}
+                    </span>
                   </div>
-                  <h4 className="text-base font-bold text-[#111111] leading-tight mb-2">{deal.title}</h4>
-                  <div className="flex items-end justify-between mt-6">
-                    <div>
-                      <p className="text-xs text-[#6b7280] font-medium">Owner</p>
-                      <p className="text-xs font-bold text-black">{deal.owner}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-black text-black">${(deal.amount / 1000).toFixed(1)}k</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-              
-              {getStageDeals(stage.id).length === 0 && (
-                <div className="h-32 rounded-[24px] border border-dashed border-[#f1f1f1] flex items-center justify-center">
-                  <p className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">No Active Deals</p>
+                  <p className="text-xs font-bold text-[#6b7280] tabular-nums">${(getStageTotal(stage.id) / 1000).toFixed(1)}k</p>
                 </div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+
+                <Droppable droppableId={stage.id}>
+                  {(provided, snapshot) => (
+                    <div 
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className={cn(
+                        "flex-1 space-y-4 rounded-[32px] transition-colors p-2",
+                        snapshot.isDraggingOver ? "bg-gray-50/50" : "bg-transparent"
+                      )}
+                    >
+                      {stageDeals.map((deal, index) => (
+                        <Draggable key={deal.id} draggableId={deal.id} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              onClick={() => handleEdit(deal)}
+                              className={cn(
+                                "p-6 floating-card cursor-grab active:cursor-grabbing group",
+                                snapshot.isDragging ? "shadow-[0_40px_80px_rgba(0,0,0,0.1)] scale-105 rotate-1" : ""
+                              )}
+                            >
+                              <div className="flex justify-between items-start mb-4">
+                                <p className="text-[10px] font-bold text-[#bbbbbb] uppercase tracking-[0.2em]">{deal.customer}</p>
+                                <ArrowUpRight className="w-4 h-4 opacity-0 group-hover:opacity-30 transition-opacity" />
+                              </div>
+                              <h4 className="text-base font-black text-black leading-tight mb-2">{deal.title}</h4>
+                              <div className="flex items-end justify-between mt-6">
+                                <div>
+                                  <p className="text-[10px] text-[#bbbbbb] font-black uppercase tracking-widest leading-none mb-1">Owner</p>
+                                  <p className="text-xs font-bold text-black">{deal.owner}</p>
+                                </div>
+                                <div className="text-right">
+                                  <p className="text-sm font-black text-black">${(deal.amount / 1000).toFixed(1)}k</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                      
+                      {stageDeals.length === 0 && !snapshot.isDraggingOver && (
+                        <div className="h-32 rounded-[32px] border-2 border-dashed border-[#f1f1f1] flex items-center justify-center">
+                          <p className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.3em]">No Active Assets</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            );
+          })}
+        </div>
+      </DragDropContext>
 
       <Drawer
         isOpen={isDrawerOpen}

@@ -9,6 +9,8 @@ import Customers from './modules/crm/Customers';
 import ActivityLogs from './modules/core/ActivityLogs';
 import Settings from './modules/core/Settings';
 import Pipeline from './modules/Pipeline';
+import Analytics from './modules/Analytics';
+import Billing from './modules/Billing';
 import Auth from './modules/Auth';
 import Landing from './modules/Landing';
 import { useDashboardStats } from './hooks/useDashboardStats';
@@ -210,6 +212,8 @@ export default function App() {
               <Route path="/crm/customers" element={<Customers />} />
               <Route path="/pipeline" element={<Pipeline />} />
               <Route path="/activity" element={<ActivityLogs />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/billing" element={<Billing />} />
               <Route path="/category" element={<Modules />} />
               <Route path="/profile" element={<div>Profile (PoC)</div>} />
               <Route path="/settings" element={<Settings />} />
