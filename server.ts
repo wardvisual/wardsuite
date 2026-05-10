@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import { fileURLToPath } from "url";
+import apiRoutes from "./server/routes";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,26 +13,8 @@ async function startServer() {
 
   app.use(express.json());
 
-  // API Health check
-  app.get("/api/health", (req, res) => {
-    res.json({ status: "ok" });
-  });
-
-  // Simple placeholder API for demo data
-  app.get("/api/dashboard/stats", (req, res) => {
-    res.json({
-      success: true,
-      data: {
-        totalSuppliers: 24,
-        totalProducts: 142,
-        lowStockItems: 5,
-        totalLeads: 89,
-        totalCustomers: 56,
-        openDeals: 12,
-        revenue: 102456
-      }
-    });
-  });
+  // Modular API Routes
+  app.use("/api", apiRoutes);
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {

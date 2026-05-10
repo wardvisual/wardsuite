@@ -14,7 +14,8 @@ import {
   BarChart3,
   MessageSquare,
   User,
-  ChevronLeft
+  ChevronLeft,
+  Target
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { motion } from 'motion/react';
@@ -23,10 +24,11 @@ const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
   { icon: Briefcase, label: 'Leads', path: '/crm/leads' },
   { icon: User, label: 'Contacts', path: '/crm/customers' },
+  { icon: Target, label: 'Pipeline', path: '/pipeline' },
   { icon: Layers, label: 'Deals', path: '/category' },
   { icon: MessageSquare, label: 'Activities', path: '/activity' },
-  { icon: BarChart3, label: 'Analytics', path: '/dashboard' },
-  { icon: Grid, label: 'Billing', path: '/dashboard' },
+  { icon: BarChart3, label: 'Analytics', path: '/dashboard/analytics' },
+  { icon: Grid, label: 'Billing', path: '/dashboard/billing' },
 ];
 
 export function Sidebar() {

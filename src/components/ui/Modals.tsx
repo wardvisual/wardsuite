@@ -24,11 +24,11 @@ export function Drawer({ isOpen, onClose, title, children, footer }: DrawerProps
             className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[999]"
           />
           <motion.div
-            initial={{ x: '-100%' }}
+            initial={{ x: '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '-100%' }}
+            exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-y-0 left-0 w-full max-w-md bg-white shadow-2xl z-[1000] flex flex-col"
+            className="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-[1000] flex flex-col"
           >
             <div className="flex items-center justify-between p-6 border-b border-[#f1f1f1]">
               <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
@@ -118,6 +118,51 @@ export function ConfirmDialog({
                   {confirmText}
                 </button>
               </div>
+            </motion.div>
+          </div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}
+
+export function Modal({ isOpen, onClose, title, children, className }: ModalProps) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[1010]"
+          />
+          <div className="fixed inset-0 flex items-center justify-center p-4 z-[1011] pointer-events-none">
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className={cn("bg-white rounded-[32px] shadow-2xl w-full p-8 pointer-events-auto border border-[#f1f1f1]", className)}
+            >
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-2xl font-black tracking-tight">{title}</h2>
+                <button
+                  onClick={onClose}
+                  className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                >
+                  <X className="w-5 h-5 text-[#6b7280]" />
+                </button>
+              </div>
+              {children}
             </motion.div>
           </div>
         </>

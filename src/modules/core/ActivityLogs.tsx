@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, CheckCircle2, History, PlayCircle, User, Search, Filter, ArrowRight, Activity, Terminal } from 'lucide-react';
+import { Clock, CheckCircle2, History, PlayCircle, User, Search, Filter, ArrowRight, Activity, Terminal, Plus, AlertCircle } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { motion } from 'motion/react';
 

@@ -4,7 +4,7 @@ import { getFirestore, doc, getDocFromCache, getDocFromServer } from 'firebase/f
 import firebaseConfig from '@/firebase-applet-config.json';
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const auth = getAuth(app);
 
 // Simple connection test as required by instructions

@@ -75,6 +75,16 @@ export interface Deal {
   notes?: string;
 }
 
+export interface DashboardStats {
+  totalSuppliers: number;
+  totalProducts: number;
+  lowStockItems: number;
+  totalLeads: number;
+  totalCustomers: number;
+  openDeals: number;
+  revenue: number;
+}
+
 export interface AuditLog {
   id: string;
   entityType: string;

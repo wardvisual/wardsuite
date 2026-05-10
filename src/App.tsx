@@ -8,8 +8,9 @@ import Leads from './modules/crm/Leads';
 import Customers from './modules/crm/Customers';
 import ActivityLogs from './modules/core/ActivityLogs';
 import Settings from './modules/core/Settings';
+import Pipeline from './modules/Pipeline';
+import Auth from './modules/Auth';
 import Landing from './modules/Landing';
-import Login from './modules/Login';
 import { useDashboardStats } from './hooks/useDashboardStats';
 import { cn } from '@/src/lib/utils';
 import { motion } from 'motion/react';
@@ -196,7 +197,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Auth />} />
         
         {/* Protected Routes inside Shell */}
         <Route path="/*" element={
@@ -207,6 +208,7 @@ export default function App() {
               <Route path="/scm/products" element={<Products />} />
               <Route path="/crm/leads" element={<Leads />} />
               <Route path="/crm/customers" element={<Customers />} />
+              <Route path="/pipeline" element={<Pipeline />} />
               <Route path="/activity" element={<ActivityLogs />} />
               <Route path="/category" element={<Modules />} />
               <Route path="/profile" element={<div>Profile (PoC)</div>} />

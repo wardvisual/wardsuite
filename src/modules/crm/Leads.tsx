@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { Plus, Search, Filter, RefreshCw, UserPlus, Phone, Mail, Edit2, Trash2, Loader2, Link2, Building, Hash } from 'lucide-react';
+import { Plus, Search, Filter, RefreshCw, UserPlus, Phone, Mail, Edit2, Trash2, Loader2, Link2, Building, Hash, LayoutGrid, List, Download, Upload, Printer } from 'lucide-react';
 import { Lead } from '@/src/types';
 import { cn } from '@/src/lib/utils';
 import { DataTable } from '@/src/components/ui/DataTable';
 import { Drawer, ConfirmDialog } from '@/src/components/ui/Modals';
 import { ColumnDef } from '@tanstack/react-table';
+import { LeadKanban } from '@/src/components/crm/LeadKanban';
+import { ColumnMapper } from '@/src/components/crm/ColumnMapper';
 
 const MOCK_LEADS: Lead[] = [
   { id: '1', code: 'LD-001', fullName: 'Alice Cooper', company: 'Cooper Corp', email: 'alice@cooper.com', phone: '+1 987 654 3210', source: 'Website', status: 'new', assignedUserId: 'u1' },
@@ -14,14 +16,66 @@ const MOCK_LEADS: Lead[] = [
 ];
 
 export default function Leads() {
-  const [leads] = useState<Lead[]>(MOCK_LEADS);
+  const [leads, setLeads] = useState<Lead[]>(MOCK_LEADS);
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewMode, setViewMode] = useState<'table' | 'kanban'>('table');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isMapperOpen, setIsMapperOpen] = useState(false);
+  const [csvData, setCsvData] = useState<{ headers: string[], rows: string[][] }>({ headers: [], rows: [] });
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [formData, setFormData] = useState<Partial<Lead>>({
     status: 'new'
   });
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      const lines = text.split('\n').filter(l => l.trim());
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = lines.slice(1).map(l => l.split(',').map(c => c.trim()));
+      
+      setCsvData({ headers, rows });
+      setIsMapperOpen(true);
+    };
+    reader.readAsText(file);
+  };
+
+  const handleImportFinalized = (mappedData: any[]) => {
+    const newLeads: Lead[] = mappedData.map((d, i) => ({
+      ...d,
+      id: Math.random().toString(36).substr(2, 9),
+      code: `LD-IMP-${i + 1}`,
+      status: 'new',
+      assignedUserId: 'u1'
+    }));
+    setLeads([...leads, ...newLeads]);
+    setIsMapperOpen(false);
+  };
+
+  const handleStatusChange = (id: string, newStatus: Lead['status']) => {
+    setLeads(leads.map(l => l.id === id ? { ...l, status: newStatus } : l));
+  };
+
+  const exportCSV = () => {
+    const headers = ['Code', 'Full Name', 'Company', 'Email', 'Phone', 'Source', 'Status'];
+    const rows = leads.map(l => [l.code, l.fullName, l.company, l.email, l.phone, l.source, l.status]);
+    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "wisedcrm_leads.csv");
+    link.click();
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   const columns: ColumnDef<Lead>[] = [
     {
@@ -112,26 +166,63 @@ export default function Leads() {
 
   return (
     <div className="space-y-10">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 print:hidden">
         <div className="space-y-2">
           <h2 className="text-[42px] font-bold tracking-tight text-[#111111] leading-[1.1]">Leads</h2>
           <p className="text-[#6b7280] text-lg font-medium">Convert potential opportunities into valuable customers.</p>
         </div>
-        <button 
-          onClick={() => { setSelectedLead(null); setFormData({ status: 'new' }); setIsDrawerOpen(true); }}
-          className="btn-primary"
-        >
-          <Plus className="w-5 h-5" />
-          Capture Lead
-        </button>
+        
+        <div className="flex flex-wrap gap-3">
+          <div className="flex bg-gray-50 p-1 rounded-xl border border-[#f1f1f1] mr-4">
+             <button 
+               onClick={() => setViewMode('table')}
+               className={cn("p-2 rounded-lg transition-all", viewMode === 'table' ? "bg-white text-black shadow-sm" : "text-[#6b7280] hover:text-black")}
+             >
+                <List className="w-4 h-4" />
+             </button>
+             <button 
+               onClick={() => setViewMode('kanban')}
+               className={cn("p-2 rounded-lg transition-all", viewMode === 'kanban' ? "bg-white text-black shadow-sm" : "text-[#6b7280] hover:text-black")}
+             >
+                <LayoutGrid className="w-4 h-4" />
+             </button>
+          </div>
+
+          <button onClick={handlePrint} className="btn-secondary px-4">
+             <Printer className="w-4 h-4" />
+          </button>
+          <button onClick={exportCSV} title="Export CSV" className="btn-secondary px-4">
+             <Download className="w-4 h-4" />
+          </button>
+          <label className="btn-secondary px-4 cursor-pointer">
+             <input type="file" accept=".csv" className="hidden" onChange={handleFileUpload} />
+             <Upload className="w-4 h-4" />
+          </label>
+          
+          <button 
+            onClick={() => { setSelectedLead(null); setFormData({ status: 'new' }); setIsDrawerOpen(true); }}
+            className="btn-primary"
+          >
+            <Plus className="w-5 h-5" />
+            Capture Lead
+          </button>
+        </div>
       </div>
 
-      <DataTable 
-        columns={columns} 
-        data={leads} 
-        searchTerm={searchTerm}
-        onRowClick={handleEdit}
-      />
+      {viewMode === 'table' ? (
+        <DataTable 
+          columns={columns} 
+          data={leads} 
+          searchTerm={searchTerm}
+          onRowClick={handleEdit}
+        />
+      ) : (
+        <LeadKanban 
+          leads={leads} 
+          onLeadClick={handleEdit} 
+          onStatusChange={handleStatusChange} 
+        />
+      )}
 
       <Drawer
         isOpen={isDrawerOpen}
@@ -217,6 +308,14 @@ export default function Leads() {
         description={`Are you sure you want to delete ${selectedLead?.fullName}? All activity logs for this lead will be permanently removed.`}
         confirmText="Remove Prospect"
         variant="danger"
+      />
+
+      <ColumnMapper 
+        isOpen={isMapperOpen}
+        onClose={() => setIsMapperOpen(false)}
+        csvHeaders={csvData.headers}
+        csvRows={csvData.rows}
+        onImport={handleImportFinalized}
       />
     </div>
   );
