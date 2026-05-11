@@ -91,7 +91,8 @@ export default function Pipeline() {
   };
 
   const getStageDeals = (id: Deal['stage']) => deals.filter(d => d.stage === id);
-  const getStageTotal = (id: Deal['stage']) => getStageDeals(id).reduce((sum, d) => sum + d.amount, 0);
+  const getStageTotal = (id: Deal['stage']) => getStageDeals(id).reduce((sum, d) => sum + Number(d.amount ?? 0), 0);
+  const fmtK = (n: number) => n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n.toFixed(0)}`;
 
   return (
     <div className="space-y-10">
@@ -135,7 +136,7 @@ export default function Pipeline() {
                       </span>
                     </div>
                     <p className="text-xs font-bold text-[#6b7280] tabular-nums">
-                      ${(getStageTotal(stage.id) / 1000).toFixed(1)}k
+                      {fmtK(getStageTotal(stage.id))}
                     </p>
                   </div>
 

@@ -1,14 +1,62 @@
-import React, { useState } from 'react';
-import { User, Bell, Shield, Globe, ChevronRight, Monitor, Save, Key, Mail, Lock, Languages, Clock, Coins } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Bell, Shield, Globe, ChevronRight, Monitor, Save, Key, Mail, Lock, Languages, Clock, Coins, LogOut, Loader2, CheckCircle } from 'lucide-react';
 import { useAuthStore } from '@/src/store/auth.store';
+import { usersApi } from '@/src/services/users.api';
+import { authApi } from '@/src/services/auth.api';
 import { cn } from '@/src/lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
+import { useNavigate } from 'react-router-dom';
 
 type SettingsTab = 'profile' | 'security' | 'alerts' | 'regional';
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
-  const { user } = useAuthStore();
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState('');
+  const { user, token, clearAuth, setAuth } = useAuthStore();
+  const navigate = useNavigate();
+
+  const [name, setName] = useState(user?.name ?? '');
+  const [timezone, setTimezone] = useState('UTC+08:00 (Asia/Singapore)');
+  const [language, setLanguage] = useState('Global English (EN-US)');
+  const [currency, setCurrency] = useState('United States Dollar (USD)');
+
+  useEffect(() => {
+    usersApi.me().then(res => {
+      const p = res.data;
+      if (p.name) setName(p.name);
+      if (p.timezone) setTimezone(p.timezone);
+      if (p.language) setLanguage(p.language);
+      if (p.currency) setCurrency(p.currency);
+    }).catch(() => {});
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError('');
+    setSaved(false);
+    try {
+      const res = await usersApi.updateMe({ name, timezone, language, currency });
+      if (user && token) {
+        setAuth({ ...user, name: res.data.name ?? name }, token);
+      }
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch {
+      setError('Failed to save settings. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    if (token) {
+      try { await authApi.logout(token); } catch { /* swallow */ }
+    }
+    clearAuth();
+    navigate('/login');
+  };
 
   const tabs = [
     { id: 'profile', icon: User, label: 'Profile Intelligence', desc: 'Manage your public identity and credentials.' },
@@ -24,10 +72,31 @@ export default function Settings() {
           <h2 className="text-[42px] font-black tracking-tight text-black leading-tight">System Console</h2>
           <p className="text-[#6b7280] text-lg font-medium tracking-tight">Fine-tune your environment and security parameters.</p>
         </div>
-        <button type="button" className="flex items-center gap-2 px-8 h-14 bg-black text-white rounded-[20px] text-sm font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-black/10">
-          <Save className="w-5 h-5" />
-          Synchronize Changes
-        </button>
+        <div className="flex items-center gap-3">
+          {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
+          {saved && (
+            <span className="flex items-center gap-2 text-sm text-green-600 font-bold">
+              <CheckCircle className="w-4 h-4" /> Saved
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-2 px-8 h-14 bg-black text-white rounded-[20px] text-sm font-black uppercase tracking-widest hover:opacity-90 transition-all shadow-xl shadow-black/10 disabled:opacity-50"
+          >
+            {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
+            Synchronize
+          </button>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-6 h-14 border border-[#f1f1f1] text-[#6b7280] rounded-[20px] text-sm font-black uppercase tracking-widest hover:bg-red-50 hover:text-red-500 hover:border-red-100 transition-all"
+          >
+            <LogOut className="w-5 h-5" />
+            Sign Out
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-12 gap-12">
@@ -110,11 +179,12 @@ export default function Settings() {
                         <input
                           id="settings-email"
                           type="email"
-                          title="Workspace email address"
-                          className="w-full h-14 pl-12 pr-6 bg-[#f5f5f5] border border-transparent rounded-2xl text-sm font-bold focus:bg-white focus:border-[#eeeeee] outline-none transition-all"
-                          defaultValue={user?.email ?? ''}
+                          readOnly
+                          className="w-full h-14 pl-12 pr-6 bg-[#f5f5f5] border border-transparent rounded-2xl text-sm font-bold outline-none cursor-not-allowed opacity-60"
+                          value={user?.email ?? ''}
                         />
                       </div>
+                      <p className="text-[10px] text-[#bbbbbb] font-medium">Email cannot be changed on demo accounts.</p>
                     </div>
                     <div className="space-y-4">
                       <label htmlFor="settings-name" className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">Operator Tag</label>
@@ -125,7 +195,8 @@ export default function Settings() {
                           type="text"
                           title="Display name"
                           className="w-full h-14 pl-12 pr-6 bg-[#f5f5f5] border border-transparent rounded-2xl text-sm font-bold focus:bg-white focus:border-[#eeeeee] outline-none transition-all"
-                          defaultValue={user?.name ?? ''}
+                          value={name}
+                          onChange={e => setName(e.target.value)}
                         />
                       </div>
                     </div>
@@ -159,7 +230,6 @@ export default function Settings() {
                         Activate
                       </div>
                     </div>
-
                     <div className="p-6 bg-gray-50 rounded-[24px] flex items-center justify-between group hover:bg-black transition-all cursor-pointer">
                       <div className="flex items-center gap-6">
                         <div className="w-12 h-12 rounded-xl bg-white flex items-center justify-center border border-[#f1f1f1]">
@@ -206,7 +276,7 @@ export default function Settings() {
                 <div className="space-y-10">
                   <div className="space-y-2">
                     <h3 className="text-2xl font-black tracking-tight">Regional Settings</h3>
-                    <p className="text-sm font-medium text-[#6b7280]">Synchronize your interface with local geopolitical standards.</p>
+                    <p className="text-sm font-medium text-[#6b7280]">Synchronize your interface with local standards.</p>
                   </div>
                   <div className="grid grid-cols-2 gap-8">
                     <div className="space-y-3">
@@ -216,6 +286,8 @@ export default function Settings() {
                         <select
                           id="settings-language"
                           title="Interface language"
+                          value={language}
+                          onChange={e => setLanguage(e.target.value)}
                           className="w-full h-14 pl-12 pr-6 bg-[#f5f5f5] border border-transparent rounded-2xl text-sm font-bold focus:bg-white focus:border-[#eeeeee] outline-none appearance-none transition-all"
                         >
                           <option>Global English (EN-US)</option>
@@ -231,6 +303,8 @@ export default function Settings() {
                         <select
                           id="settings-timezone"
                           title="System timezone"
+                          value={timezone}
+                          onChange={e => setTimezone(e.target.value)}
                           className="w-full h-14 pl-12 pr-6 bg-[#f5f5f5] border border-transparent rounded-2xl text-sm font-bold focus:bg-white focus:border-[#eeeeee] outline-none appearance-none transition-all text-xs"
                         >
                           <option>UTC+08:00 (Asia/Singapore)</option>
@@ -247,6 +321,8 @@ export default function Settings() {
                       <select
                         id="settings-currency"
                         title="Fiscal currency"
+                        value={currency}
+                        onChange={e => setCurrency(e.target.value)}
                         className="w-full h-14 pl-12 pr-6 bg-[#f5f5f5] border border-transparent rounded-2xl text-sm font-bold focus:bg-white focus:border-[#eeeeee] outline-none appearance-none transition-all"
                       >
                         <option>United States Dollar (USD)</option>

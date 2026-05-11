@@ -18,6 +18,44 @@ import Landing from './modules/Landing';
 import { useDashboardStats } from './hooks/useDashboardStats';
 import { motion } from 'motion/react';
 
+const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function RevenueChart({ monthlyRevenue }: { monthlyRevenue: number[] }) {
+  const now = new Date();
+  const maxVal = Math.max(...monthlyRevenue, 1);
+  const bars = monthlyRevenue.map(v => Math.max(Math.round((v / maxVal) * 85), 5));
+  const topLabel = maxVal >= 1000 ? `$${(maxVal / 1000).toFixed(1)}k` : `$${maxVal}`;
+  const midLabel = maxVal >= 1000 ? `$${(maxVal / 2000).toFixed(1)}k` : `$${Math.round(maxVal / 2)}`;
+
+  return (
+    <div className="h-[300px] w-full mt-10 relative">
+      <div className="absolute inset-x-0 bottom-6 top-0 flex items-end justify-between px-2 gap-1">
+        {bars.map((h, i) => {
+          const monthIdx = (now.getMonth() - 11 + i + 12) % 12;
+          const val = monthlyRevenue[i];
+          const label = val >= 1000 ? `$${(val / 1000).toFixed(1)}k` : `$${val}`;
+          return (
+            <div key={i} className="flex-1 flex flex-col items-center gap-1">
+              <div
+                className="w-full bg-black/5 rounded-t-lg transition-all hover:bg-black/15 group relative cursor-default"
+                style={{ height: `${h}%` }}
+              >
+                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                  {label}
+                </div>
+              </div>
+              <span className="text-[9px] font-bold text-[#cccccc] uppercase">{MONTH_LABELS[monthIdx]}</span>
+            </div>
+          );
+        })}
+      </div>
+      <div className="absolute left-0 top-0 bottom-6 w-10 flex flex-col justify-between py-1 text-[9px] font-bold text-[#6b7280] uppercase opacity-50">
+        <span>{topLabel}</span><span>{midLabel}</span><span>$0</span>
+      </div>
+    </div>
+  );
+}
+
 const Dashboard = () => {
   const { stats, loading } = useDashboardStats();
 
@@ -29,11 +67,16 @@ const Dashboard = () => {
     );
   }
 
+  const fmtK = (n: number) => n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n.toFixed(0)}`;
+  const conversionRate = stats.totalLeads > 0
+    ? ((stats.totalCustomers / stats.totalLeads) * 100).toFixed(1) + '%'
+    : '0%';
+
   const statCards = [
-    { label: 'CONVERSION TARGET', value: '1', change: '12.5%', icon: Target },
-    { label: 'FORECAST REVENUE', value: '$' + (stats.revenue / 1000).toFixed(0) + 'k', change: '8.2%', icon: DollarSign },
-    { label: 'NETWORK REACH', value: stats.totalCustomers.toString(), change: '2.4%', icon: Users },
-    { label: 'GROWTH VELOCITY', value: '24', change: '15%', icon: TrendingUp },
+    { label: 'CONVERSION RATE', value: conversionRate, change: `${stats.totalLeads} leads`, icon: Target },
+    { label: 'FORECAST REVENUE', value: fmtK(stats.pipelineRevenue), change: `${stats.openDeals} active deals`, icon: DollarSign },
+    { label: 'NETWORK REACH', value: stats.totalCustomers.toString(), change: `${stats.totalLeads} total leads`, icon: Users },
+    { label: 'WON REVENUE', value: fmtK(stats.wonRevenue), change: 'closed deals', icon: TrendingUp },
   ];
 
   return (
@@ -74,7 +117,6 @@ const Dashboard = () => {
                   <TrendingUp className="w-3 h-3" />
                   {stat.change}
                 </span>
-                <span className="text-[11px] text-[#cccccc] font-bold uppercase tracking-widest ml-1">vs last month</span>
               </div>
             </div>
           </motion.div>
@@ -94,20 +136,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="h-[300px] w-full mt-10 relative">
-            <div className="absolute inset-x-0 bottom-0 top-10 flex items-end justify-between px-2">
-              {[30, 45, 35, 55, 40, 65, 50, 75, 45, 80, 60, 90].map((h, i) => (
-                <div key={i} className="w-[6%] bg-black/5 rounded-t-lg transition-all hover:bg-black/10 group relative" style={{ height: h + '%' }}>
-                  <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-black text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                    ${h}k
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="absolute left-0 inset-y-0 w-10 flex flex-col justify-between py-2 text-[10px] font-bold text-[#6b7280] uppercase opacity-50">
-              <span>$10k</span><span>$7.5k</span><span>$5k</span><span>$2.5k</span><span>0</span>
-            </div>
-          </div>
+          <RevenueChart monthlyRevenue={stats.monthlyRevenue} />
         </div>
 
         <div className="col-span-4 flex flex-col">

@@ -104,6 +104,9 @@ export interface DashboardStats {
   totalCustomers: number;
   openDeals: number;
   recentActivities: number;
+  pipelineRevenue: number;
+  wonRevenue: number;
+  monthlyRevenue: number[];
 }
 
 export interface ApiResponse<T> {
