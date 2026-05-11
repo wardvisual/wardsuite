@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from './Sidebar';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Bell, LogOut } from 'lucide-react';
+import { Search, Bell, LogOut, Menu } from 'lucide-react';
 import { useAuthStore } from '@/src/store/auth.store';
 import { authApi } from '@/src/services/auth.api';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ interface ShellProps {
 export function Shell({ children }: ShellProps) {
   const { user, token, clearAuth } = useAuthStore();
   const navigate = useNavigate();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = async () => {
     if (token) {
@@ -28,11 +29,23 @@ export function Shell({ children }: ShellProps) {
 
   return (
     <div className="min-h-screen bg-[#fcfcfc] flex">
-      <Sidebar />
+      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-      <main className="flex-1 ml-[280px] flex flex-col h-screen overflow-hidden bg-[#fcfcfc]">
-        <header className="h-24 px-12 flex items-center justify-between bg-white/50 backdrop-blur-xl shrink-0 sticky top-0 z-10">
-          <div className="flex-1 max-w-2xl">
+      <main className="flex-1 lg:ml-[280px] flex flex-col h-screen overflow-hidden bg-[#fcfcfc]">
+        <header className="h-20 lg:h-24 px-4 lg:px-12 flex items-center justify-between bg-white/50 backdrop-blur-xl shrink-0 sticky top-0 z-10">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              title="Open menu"
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden p-2.5 rounded-xl hover:bg-[#f5f5f5] text-[#bbbbbb] hover:text-black transition-all"
+            >
+              <Menu className="w-5 h-5" aria-hidden="true" />
+              <span className="sr-only">Open menu</span>
+            </button>
+          </div>
+
+          <div className="flex-1 max-w-2xl hidden sm:block">
             <div className="relative group">
               <Search className="w-5 h-5 absolute left-6 top-1/2 -translate-y-1/2 text-[#bbbbbb]" />
               <input
@@ -79,7 +92,7 @@ export function Shell({ children }: ShellProps) {
           </div>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-12 pb-12 pt-6">
+        <div className="flex-1 overflow-y-auto px-4 lg:px-12 pb-8 lg:pb-12 pt-6">
           <AnimatePresence mode="wait">
             <motion.div
               key={window.location.pathname}
