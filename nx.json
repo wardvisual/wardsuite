@@ -1,0 +1,96 @@
+{
+  "$schema": "https://cdn.nx.dev/schema/nx-schema.json",
+  "npmScope": "wardsuite",
+  "affected": { "defaultBase": "main" },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": { "cacheableOperations": ["build", "lint", "test"] }
+    }
+  },
+  "targetDefaults": {
+    "build": { "dependsOn": ["^build"] }
+  },
+  "projects": {
+    "web": {
+      "root": "apps/web",
+      "sourceRoot": "apps/web/src",
+      "projectType": "application",
+      "tags": ["scope:web", "type:app"],
+      "targets": {
+        "build": {
+          "executor": "nx:run-commands",
+          "options": { "command": "vite build", "cwd": "{workspaceRoot}/apps/web" }
+        },
+        "serve": {
+          "executor": "nx:run-commands",
+          "options": { "command": "vite", "cwd": "{workspaceRoot}/apps/web" }
+        }
+      }
+    },
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "tags": ["scope:api", "type:app"],
+      "targets": {
+        "build": {
+          "executor": "nx:run-commands",
+          "options": { "command": "esbuild apps/api/main.ts --bundle --platform=node --format=esm --outfile=dist/server.js", "cwd": "{workspaceRoot}" }
+        },
+        "serve": {
+          "executor": "nx:run-commands",
+          "options": { "command": "tsx --env-file=.env apps/api/main.ts", "cwd": "{workspaceRoot}" }
+        }
+      }
+    },
+    "shared-types": {
+      "root": "libs/shared/types",
+      "sourceRoot": "libs/shared/types/src",
+      "projectType": "library",
+      "tags": ["scope:shared", "type:lib"]
+    },
+    "shared-ui": {
+      "root": "libs/shared/ui",
+      "sourceRoot": "libs/shared/ui/src",
+      "projectType": "library",
+      "tags": ["scope:shared", "type:lib"]
+    },
+    "shared-auth": {
+      "root": "libs/shared/auth",
+      "sourceRoot": "libs/shared/auth/src",
+      "projectType": "library",
+      "tags": ["scope:shared", "type:lib"]
+    },
+    "crm-domain": {
+      "root": "libs/crm/domain",
+      "sourceRoot": "libs/crm/domain/src",
+      "projectType": "library",
+      "tags": ["scope:crm", "type:domain"]
+    },
+    "crm-data-access": {
+      "root": "libs/crm/data-access",
+      "sourceRoot": "libs/crm/data-access/src",
+      "projectType": "library",
+      "tags": ["scope:crm", "type:data-access"]
+    },
+    "crm-feature-leads": {
+      "root": "libs/crm/feature-leads",
+      "sourceRoot": "libs/crm/feature-leads/src",
+      "projectType": "library",
+      "tags": ["scope:crm", "type:feature"]
+    },
+    "crm-feature-customers": {
+      "root": "libs/crm/feature-customers",
+      "sourceRoot": "libs/crm/feature-customers/src",
+      "projectType": "library",
+      "tags": ["scope:crm", "type:feature"]
+    },
+    "crm-ui": {
+      "root": "libs/crm/ui",
+      "sourceRoot": "libs/crm/ui/src",
+      "projectType": "library",
+      "tags": ["scope:crm", "type:ui"]
+    }
+  }
+}

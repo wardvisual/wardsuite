@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": ["vite/client"],
+    "paths": {
+      "@/*":                       ["./apps/web/*"],
+      "@server/*":                 ["./apps/api/src/*"],
+      "@wardsuite/shared/types":   ["./libs/shared/types/src/index.ts"],
+      "@wardsuite/shared/utils":   ["./libs/shared/utils/src/index.ts"],
+      "@wardsuite/shared/auth":    ["./libs/shared/auth/src/index.ts"],
+      "@wardsuite/shared/ui":      ["./libs/shared/ui/src/index.ts"],
+      "@wardsuite/shared/config":  ["./libs/shared/config/src/index.ts"],
+      "@wardsuite/crm/domain":         ["./libs/crm/domain/src/index.ts"],
+      "@wardsuite/crm/data-access":    ["./libs/crm/data-access/src/index.ts"],
+      "@wardsuite/crm/feature-leads":  ["./libs/crm/feature-leads/src/index.ts"],
+      "@wardsuite/crm/feature-customers": ["./libs/crm/feature-customers/src/index.ts"],
+      "@wardsuite/crm/ui":         ["./libs/crm/ui/src/index.ts"]
+    }
+  }
+}
