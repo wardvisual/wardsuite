@@ -16,7 +16,7 @@ async function nextCode(): Promise<string> {
 }
 
 function toDeal(id: string, data: FirebaseFirestore.DocumentData): Deal {
-  return { id, ...data } as Deal;
+  return { id, ...data, amount: Number(data.amount ?? 0) } as Deal;
 }
 
 class DealsService {
@@ -43,7 +43,7 @@ class DealsService {
       title: dto.title,
       customerId: dto.customerId,
       leadId: dto.leadId ?? null,
-      amount: dto.amount,
+      amount: Number(dto.amount ?? 0),
       stage: dto.stage ?? 'open',
       ownerId: dto.ownerId,
       expectedCloseDate: dto.expectedCloseDate,
@@ -81,6 +81,31 @@ class DealsService {
       .count()
       .get();
     return snap.data().count;
+  }
+
+  async pipelineRevenue(): Promise<number> {
+    const snap = await this.col.where('stage', 'not-in', ['lost']).get();
+    return snap.docs.reduce((sum, d) => sum + Number(d.data().amount ?? 0), 0);
+  }
+
+  async wonRevenue(): Promise<number> {
+    const snap = await this.col.where('stage', '==', 'won').get();
+    return snap.docs.reduce((sum, d) => sum + Number(d.data().amount ?? 0), 0);
+  }
+
+  async monthlyRevenue(): Promise<number[]> {
+    const now = new Date();
+    const months = new Array<number>(12).fill(0);
+    const cutoff = new Date(now.getFullYear(), now.getMonth() - 11, 1).toISOString();
+    const snap = await this.col.where('createdAt', '>=', cutoff).get();
+    snap.docs.forEach(d => {
+      const data = d.data();
+      const date = new Date(data.createdAt as string);
+      const monthsAgo = (now.getFullYear() - date.getFullYear()) * 12 + (now.getMonth() - date.getMonth());
+      const idx = 11 - monthsAgo;
+      if (idx >= 0 && idx < 12) months[idx] += Number(data.amount ?? 0);
+    });
+    return months;
   }
 }
 

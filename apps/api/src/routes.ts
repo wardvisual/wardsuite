@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 // Auth
 import authRoutes from '@server/modules/auth/auth.routes';
+import usersRoutes from '@server/modules/users/users.routes';
 
 // Dashboard
 import dashboardRoutes from '@server/modules/dashboard/dashboard.routes';
@@ -21,6 +22,7 @@ import stockMovementsRoutes from '@server/modules/scm/stock-movements/stock-move
 const router = Router();
 
 router.use('/auth', authRoutes);
+router.use('/users', usersRoutes);
 router.use('/dashboard', dashboardRoutes);
 
 router.use('/crm/leads', leadsRoutes);

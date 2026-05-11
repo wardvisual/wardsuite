@@ -26,6 +26,7 @@ router.post('/', async (req: Request, res: Response) => {
   }
   const item = await leadsService.create(req.body);
   await activitiesService.logAudit({
+    relatedEntity: 'lead',
     relatedEntityId: item.id,
     action: 'created',
     actorId: resolveActor(req),
@@ -47,6 +48,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     changes.push(`name → "${req.body.fullName}"`);
 
   await activitiesService.logAudit({
+    relatedEntity: 'lead',
     relatedEntityId: req.params.id,
     action: 'updated',
     actorId: resolveActor(req),
@@ -64,6 +66,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
 
   await leadsService.delete(req.params.id);
   await activitiesService.logAudit({
+    relatedEntity: 'lead',
     relatedEntityId: req.params.id,
     action: 'deleted',
     actorId: resolveActor(req),
@@ -91,6 +94,7 @@ router.post('/:id/convert', async (req: Request, res: Response) => {
   const updatedLead = await leadsService.update(req.params.id, { status: 'won' });
 
   await activitiesService.logAudit({
+    relatedEntity: 'lead',
     relatedEntityId: lead.id,
     action: 'converted',
     actorId: resolveActor(req),

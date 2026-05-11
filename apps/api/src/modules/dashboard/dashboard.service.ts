@@ -15,6 +15,9 @@ export interface DashboardStats {
   totalCustomers: number;
   openDeals: number;
   recentActivities: number;
+  pipelineRevenue: number;
+  wonRevenue: number;
+  monthlyRevenue: number[];
 }
 
 class DashboardService {
@@ -28,6 +31,9 @@ class DashboardService {
       totalCustomers,
       openDeals,
       recentActivities,
+      pipelineRevenue,
+      wonRevenue,
+      monthlyRevenue,
     ] = await Promise.all([
       suppliersService.count(),
       productsService.count(),
@@ -37,6 +43,9 @@ class DashboardService {
       customersService.count(),
       dealsService.countOpen(),
       activitiesService.recentCount(),
+      dealsService.pipelineRevenue(),
+      dealsService.wonRevenue(),
+      dealsService.monthlyRevenue(),
     ]);
 
     return {
@@ -48,6 +57,9 @@ class DashboardService {
       totalCustomers,
       openDeals,
       recentActivities,
+      pipelineRevenue,
+      wonRevenue,
+      monthlyRevenue,
     };
   }
 }

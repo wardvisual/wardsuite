@@ -4,8 +4,9 @@ import { Activity, CreateActivityDto } from './activities.dto';
 const COLLECTION = 'crm_activities';
 
 interface AuditOptions {
+  relatedEntity?: string;
   relatedEntityId: string;
-  action: 'created' | 'updated' | 'deleted' | 'converted';
+  action: 'created' | 'updated' | 'deleted' | 'converted' | 'stage_changed';
   actorId: string;
   summary: string;
 }
@@ -42,7 +43,7 @@ class ActivitiesService {
 
   async logAudit(opts: AuditOptions): Promise<Activity> {
     return this.create({
-      relatedEntity: 'lead',
+      relatedEntity: opts.relatedEntity ?? 'system',
       relatedEntityId: opts.relatedEntityId,
       type: 'audit',
       description: opts.summary,
