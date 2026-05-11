@@ -173,9 +173,12 @@ export const invoiceService = new InvoiceService();
 
 ### 6. Add routes in `apps/api/src/modules/crm/invoices/invoices.routes.ts`
 
+Always log an audit entry after state-changing operations (see Audit Trail section below).
+
 ```typescript
 import { Router } from 'express';
 import { invoiceService } from './invoices.service';
+import { activitiesService } from '@server/modules/crm/activities/activities.service';
 import { requireAuth, resolveActor } from '@server/core/middleware/auth.middleware';
 import { ok, fail } from '@server/core/utils/response';
 
@@ -185,13 +188,36 @@ router.get('/',    requireAuth, async (req, res) => {
   res.json(ok(await invoiceService.list()));
 });
 router.post('/',   requireAuth, async (req, res) => {
-  res.json(ok(await invoiceService.create(req.body, resolveActor(req))));
+  const item = await invoiceService.create(req.body, resolveActor(req));
+  await activitiesService.logAudit({
+    relatedEntity: 'invoice',
+    relatedEntityId: item.id,
+    action: 'created',
+    actorId: resolveActor(req),
+    summary: `Invoice "${item.code}" created.`,
+  });
+  res.json(ok(item));
 });
 router.put('/:id', requireAuth, async (req, res) => {
-  res.json(ok(await invoiceService.update(req.params.id, req.body, resolveActor(req))));
+  const item = await invoiceService.update(req.params.id, req.body, resolveActor(req));
+  await activitiesService.logAudit({
+    relatedEntity: 'invoice',
+    relatedEntityId: req.params.id,
+    action: 'updated',
+    actorId: resolveActor(req),
+    summary: `Invoice updated.`,
+  });
+  res.json(ok(item));
 });
 router.delete('/:id', requireAuth, async (req, res) => {
   await invoiceService.remove(req.params.id);
+  await activitiesService.logAudit({
+    relatedEntity: 'invoice',
+    relatedEntityId: req.params.id,
+    action: 'deleted',
+    actorId: resolveActor(req),
+    summary: `Invoice deleted.`,
+  });
   res.json(ok(null, 'Deleted'));
 });
 
@@ -203,6 +229,65 @@ export default router;
 ```typescript
 import invoicesRouter from './modules/crm/invoices/invoices.routes';
 router.use('/crm/invoices', invoicesRouter);
+```
+
+---
+
+## Audit Trail
+
+Every state-changing operation (create, update, delete, stage change) **must** log an audit activity via `activitiesService.logAudit()`.
+
+```typescript
+import { activitiesService } from '@server/modules/crm/activities/activities.service';
+
+await activitiesService.logAudit({
+  relatedEntity: 'deal',           // entity type: 'lead' | 'deal' | 'customer' | 'invoice' | ...
+  relatedEntityId: item.id,        // the document ID
+  action: 'created',               // 'created' | 'updated' | 'deleted' | 'converted' | 'stage_changed'
+  actorId: resolveActor(req),      // from auth middleware
+  summary: `Deal "Q3 Renewal" (DEAL-004) created — $12,000 at stage "open".`,
+});
+```
+
+**Rules:**
+- Always include `relatedEntity` — do not omit it (defaults to `'system'` which is wrong).
+- Include before/after values in the `summary` string when meaningful: `"status 'new' → 'qualified'"`.
+- Log the audit **after** the write succeeds, not before.
+- Do not log audits for GET (read) operations.
+
+The audit log is stored in the `crm_activities` Firestore collection with `type: 'audit'` and is surfaced in the Activity Logs page.
+
+---
+
+## Users / Profile Module
+
+User profile overrides (name, timezone, language, currency) are stored in Firestore `users/{userId}` and merged with the in-memory demo user at runtime.
+
+```
+apps/api/src/modules/users/
+├── users.service.ts     ← Firestore read/write for users/{id}
+└── users.routes.ts      ← GET /api/users/me  +  PUT /api/users/me
+```
+
+Frontend:
+
+```typescript
+// apps/web/src/services/users.api.ts
+import { apiClient } from './api.client';
+
+export const usersApi = {
+  me: () => apiClient.get<UserProfile>('/users/me'),
+  updateMe: (payload) => apiClient.put<UserProfile>('/users/me', payload),
+};
+```
+
+Settings page pattern — controlled form, save on button click, update auth store:
+
+```typescript
+const handleSave = async () => {
+  const res = await usersApi.updateMe({ name, timezone, language, currency });
+  if (user && token) setAuth({ ...user, name: res.data.name }, token);
+};
 ```
 
 ---
@@ -284,6 +369,59 @@ export const invoicesApi = {
 
 ---
 
+## Number & Currency Safety
+
+Firestore stores numbers as-is, but incoming HTTP bodies may carry string values. Always coerce numeric fields in both the API service layer and the frontend.
+
+**API (service layer):**
+```typescript
+// In toDeal() or any mapping function
+amount: Number(data.amount ?? 0)
+
+// In create/update
+amount: Number(dto.amount ?? 0)
+```
+
+**Frontend (display):**
+```typescript
+// Use a consistent formatter for currency values
+const fmtK = (n: number) =>
+  n >= 1000 ? `$${(n / 1000).toFixed(1)}k` : `$${n.toFixed(0)}`;
+
+// When summing, always coerce
+const total = deals.reduce((sum, d) => sum + Number(d.amount ?? 0), 0);
+```
+
+Never display a raw Firestore field as currency without `Number()` coercion — this is the root cause of NaN in stat cards and pipeline totals.
+
+---
+
+## Dashboard Stats Pattern
+
+The dashboard service aggregates live data from all modules using `Promise.all`. Each service must expose the required count/aggregate methods.
+
+```typescript
+// apps/api/src/modules/dashboard/dashboard.service.ts
+const [totalLeads, openDeals, pipelineRevenue, wonRevenue, monthlyRevenue] = await Promise.all([
+  leadsService.count(),
+  dealsService.countOpen(),
+  dealsService.pipelineRevenue(),    // sum of all non-lost deals
+  dealsService.wonRevenue(),         // sum of won deals only
+  dealsService.monthlyRevenue(),     // number[12] — current month is index 11
+]);
+```
+
+The `monthlyRevenue` array maps to the Revenue Dynamics bar chart. Index 0 = 11 months ago, index 11 = current month.
+
+Frontend receives this via `useDashboardStats` → `apiClient.get('/dashboard/stats')` and uses it to render real bars:
+
+```typescript
+const maxVal = Math.max(...monthlyRevenue, 1);
+const bars = monthlyRevenue.map(v => Math.max(Math.round((v / maxVal) * 85), 5));
+```
+
+---
+
 ## Database Adapter (Repository Pattern)
 
 ### Why
@@ -348,6 +486,7 @@ if (loading) return <KanbanPageSkeleton />; // for kanban pages
 - API requests automatically include `Bearer <token>` from `apps/web/src/services/api.client.ts`.
 - 401 responses clear the session and redirect to `/login`.
 - Server routes that require auth use `requireAuth` from `@server/core/middleware/auth.middleware`.
+- Actor ID is resolved via `resolveActor(req)` — use this in all audit log calls.
 
 Demo accounts (see `apps/api/src/modules/auth/auth.service.ts`):
 - `admin@wardsuite.com` / `admin123`
@@ -377,18 +516,23 @@ Demo accounts (see `apps/api/src/modules/auth/auth.service.ts`):
 ## Deployment
 
 ```bash
-# Local dev (API + frontend via Express)
+# Local dev — API (:3000) + Vite (:5173) in parallel with labeled output
 npm run dev
 
-# Frontend dev with HMR (standalone Vite)
+# API only
+npm run dev:api
+
+# Frontend only (Vite with /api proxy to localhost:3000)
 npm run dev:web
 
 # Build both apps
 npm run build
 
-# Production (PM2)
+# Production (PM2 cluster mode)
 npm run start:pm2
 
 # Docker
 npm run docker:up
 ```
+
+Environment variables live at the **workspace root** `.env`. Vite reads `VITE_*` vars via `envDir` set to workspace root in `apps/web/vite.config.ts`. The API reads all vars via `dotenv/config`.
