@@ -205,7 +205,6 @@ export default function Landing() {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link to="/login" className="hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-semibold text-sm transition-all">Sign In</Link>
             <Link to="/login" className="flex items-center gap-1.5 bg-black hover:opacity-90 px-5 py-2.5 rounded-full font-semibold text-sm text-white transition-opacity">
               Get Access <ArrowRight className="w-3.5 h-3.5" />
             </Link>
