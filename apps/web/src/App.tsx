@@ -15,6 +15,7 @@ import Analytics from './modules/Analytics';
 import Billing from './modules/Billing';
 import Auth from './modules/Auth';
 import Landing from './modules/Landing';
+import CaseStudy from './modules/CaseStudy';
 import { useDashboardStats } from './hooks/useDashboardStats';
 import { motion } from 'motion/react';
 
@@ -219,6 +220,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Landing />} />
+        <Route path="/case-study" element={<CaseStudy />} />
         <Route path="/login" element={<Auth />} />
 
         <Route
