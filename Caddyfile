@@ -1,0 +1,7 @@
+wardsuite.cloud {
+	reverse_proxy app:3000
+}
+
+www.wardsuite.cloud {
+	redir https://wardsuite.cloud{uri} permanent
+}
