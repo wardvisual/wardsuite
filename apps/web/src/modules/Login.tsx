@@ -12,25 +12,25 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex bg-white">
+    <div className="flex bg-white min-h-screen">
       {/* Left side: branding/image */}
-      <div className="hidden lg:flex flex-col justify-between w-1/2 bg-[#fafafa] p-16 relative overflow-hidden">
+      <div className="relative lg:flex flex-col justify-between hidden bg-[#fafafa] p-16 w-1/2 overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-20">
-            <div className="w-10 h-10 bg-black rounded flex items-center justify-center">
+            <div className="flex justify-center items-center bg-black rounded w-10 h-10">
               <Zap className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-bold tracking-tight uppercase">Wised</span>
+            <span className="font-bold text-xl uppercase tracking-tight">WardSuite</span>
           </div>
 
           <div className="space-y-4">
-             <h1 className="text-[64px] font-bold tracking-tight leading-[1] max-w-md">
+             <h1 className="max-w-md font-bold text-[64px] leading-[1] tracking-tight">
                 Experience <br />
-                <span className="text-[#6b7280] italic font-light">the next</span> <br />
+                <span className="font-light text-[#6b7280] italic">the next</span> <br />
                 Sales Protocol.
              </h1>
-             <p className="text-[#6b7280] text-lg font-medium max-w-sm mt-8">
-                Join the global network of high-performance teams using WisedCRM to scale their revenue infrastructure.
+             <p className="mt-8 max-w-sm font-medium text-[#6b7280] text-lg">
+                Join the global network of high-performance teams using WardSuiteCRM to scale their revenue infrastructure.
              </p>
           </div>
         </div>
@@ -38,70 +38,70 @@ export default function Login() {
         <div className="relative z-10 flex items-center gap-6">
            <div className="flex -space-x-3">
               {[1,2,3,4].map(i => (
-                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-200" />
+                <div key={i} className="border-2 border-white bg-gray-200 rounded-full w-10 h-10" />
               ))}
-              <div className="min-w-10 h-10 px-3 rounded-full border-2 border-white bg-black flex items-center justify-center">
-                 <span className="text-white text-[10px] font-bold">+12</span>
+              <div className="flex justify-center items-center border-2 border-white bg-black px-3 rounded-full min-w-10 h-10">
+                 <span className="font-bold text-[10px] text-white">+12</span>
               </div>
            </div>
            <div>
-              <p className="text-sm font-bold">42.5k Members</p>
-              <p className="text-[10px] text-[#6b7280] font-bold uppercase tracking-wider">Active Platforms</p>
+              <p className="font-bold text-sm">42.5k Members</p>
+              <p className="font-bold text-[#6b7280] text-[10px] uppercase tracking-wider">Active Platforms</p>
            </div>
         </div>
 
         {/* Floating background elements */}
-        <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] border border-[#f1f1f1] rounded-full" />
-        <div className="absolute top-1/2 right-[100px] -translate-y-1/2 w-[600px] h-[600px] border border-[#f1f1f1] rounded-full" />
+        <div className="top-1/2 right-0 absolute border-[#f1f1f1] border rounded-full w-[800px] h-[800px] -translate-y-1/2" />
+        <div className="top-1/2 right-[100px] absolute border-[#f1f1f1] border rounded-full w-[600px] h-[600px] -translate-y-1/2" />
         
-        <div className="absolute bottom-12 left-16 flex gap-8">
-           <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">Trusted by LeadGen AI</span>
-           <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">ISO Certified</span>
-           <span className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">GDPR Compliant</span>
+        <div className="bottom-12 left-16 absolute flex gap-8">
+           <span className="font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">Trusted by LeadGen AI</span>
+           <span className="font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">ISO Certified</span>
+           <span className="font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">GDPR Compliant</span>
         </div>
       </div>
 
       {/* Right side: login form */}
-      <div className="flex-1 flex flex-col justify-center px-6 md:px-24">
-        <div className="max-w-md w-full mx-auto space-y-10">
+      <div className="flex flex-col flex-1 justify-center px-6 md:px-24">
+        <div className="space-y-10 mx-auto w-full max-w-md">
           <div className="space-y-4 text-center lg:text-left">
-            <h2 className="text-[42px] font-bold tracking-tight">Sign In</h2>
-            <p className="text-[#6b7280] font-medium">Please enter your credentials to access your workspace.</p>
+            <h2 className="font-bold text-[42px] tracking-tight">Sign In</h2>
+            <p className="font-medium text-[#6b7280]">Please enter your credentials to access your workspace.</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">Workspace Email</label>
+              <label className="font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">Workspace Email</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" />
+                <Mail className="top-1/2 left-4 absolute w-4 h-4 text-[#6b7280] -translate-y-1/2" />
                 <input 
                   type="email" 
                   placeholder="alex@company.com" 
                   required
-                  className="w-full pl-12 pr-4 py-4 bg-[#f9fafb] border border-[#f1f1f1] rounded-2xl text-sm focus:outline-none focus:border-black transition-colors"
+                  className="border-[#f1f1f1] bg-[#f9fafb] py-4 pr-4 pl-12 border focus:border-black rounded-2xl w-full text-sm focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest">Secure Password</label>
-                <button type="button" className="text-[10px] font-bold tracking-widest uppercase hover:underline">Forgot?</button>
+                <label className="font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">Secure Password</label>
+                <button type="button" className="font-bold text-[10px] hover:underline uppercase tracking-widest">Forgot?</button>
               </div>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6b7280]" />
+                <Lock className="top-1/2 left-4 absolute w-4 h-4 text-[#6b7280] -translate-y-1/2" />
                 <input 
                   type="password" 
                   placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" 
                   required
-                  className="w-full pl-12 pr-4 py-4 bg-[#f9fafb] border border-[#f1f1f1] rounded-2xl text-sm focus:outline-none focus:border-black transition-colors"
+                  className="border-[#f1f1f1] bg-[#f9fafb] py-4 pr-4 pl-12 border focus:border-black rounded-2xl w-full text-sm focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <button 
               type="submit"
-              className="w-full bg-black text-white py-5 rounded-full font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity active:scale-[0.98]"
+              className="flex justify-center items-center gap-3 bg-black hover:opacity-90 py-5 rounded-full w-full font-bold text-white transition-opacity active:scale-[0.98]"
             >
               ACCESS WORKSPACE
               <ArrowRight className="w-5 h-5" />
@@ -110,26 +110,26 @@ export default function Login() {
 
           <div className="relative">
              <div className="absolute inset-0 flex items-center text-[#f1f1f1]">
-                <div className="w-full border-t border-[#f1f1f1]" />
+                <div className="border-[#f1f1f1] border-t w-full" />
              </div>
-             <div className="relative flex justify-center text-[10px] font-bold uppercase tracking-widest bg-white px-4 text-[#6b7280]">
+             <div className="relative flex justify-center bg-white px-4 font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">
                 Or continue with
              </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-             <button className="flex items-center justify-center gap-2 py-4 bg-white border border-[#f1f1f1] rounded-2xl text-xs font-bold hover:bg-gray-50 transition-colors uppercase tracking-widest">
+          <div className="gap-4 grid grid-cols-2">
+             <button className="flex justify-center items-center gap-2 border-[#f1f1f1] bg-white hover:bg-gray-50 py-4 border rounded-2xl font-bold text-xs uppercase tracking-widest transition-colors">
                 <Chrome className="w-4 h-4" />
                 Google
              </button>
-             <button className="flex items-center justify-center gap-2 py-4 bg-white border border-[#f1f1f1] rounded-2xl text-xs font-bold hover:bg-gray-50 transition-colors uppercase tracking-widest">
+             <button className="flex justify-center items-center gap-2 border-[#f1f1f1] bg-white hover:bg-gray-50 py-4 border rounded-2xl font-bold text-xs uppercase tracking-widest transition-colors">
                 <Github className="w-4 h-4" />
                 Github
              </button>
           </div>
 
-          <p className="text-center text-xs text-[#6b7280] font-medium">
-             Internal team access only? <button className="text-black font-bold hover:underline">Request Invitation</button>
+          <p className="font-medium text-[#6b7280] text-center text-xs">
+             Internal team access only? <button className="font-bold text-black hover:underline">Request Invitation</button>
           </p>
         </div>
       </div>

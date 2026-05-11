@@ -34,19 +34,19 @@ const navItems = [
 
 export function Sidebar() {
   return (
-    <aside className="w-[280px] flex flex-col h-screen fixed left-0 top-0 bg-white z-20 overflow-hidden">
-      <div className="h-24 px-10 flex items-center justify-between shrink-0">
+    <aside className="top-0 left-0 z-20 fixed flex flex-col bg-white w-[280px] h-screen overflow-hidden">
+      <div className="flex justify-between items-center px-10 h-24 shrink-0">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-black rounded-2xl flex items-center justify-center shadow-lg shadow-black/10">
+          <div className="flex justify-center items-center bg-black shadow-black/10 shadow-lg rounded-2xl w-10 h-10">
             <Zap className="w-6 h-6 text-white fill-white" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-black">WISED</span>
+          <span className="font-bold text-black text-xl tracking-tight">WardSuite</span>
         </div>
       </div>
 
-      <nav className="flex-1 px-6 mt-8 space-y-2 overflow-y-auto">
-        <div className="px-4 mb-4">
-           <p className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.3em]">Organization</p>
+      <nav className="flex-1 space-y-2 mt-8 px-6 overflow-y-auto">
+        <div className="mb-4 px-4">
+           <p className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.3em]">Organization</p>
         </div>
         {navItems.map((item) => (
           <NavLink
@@ -70,7 +70,7 @@ export function Sidebar() {
                 {isActive && (
                   <motion.div 
                     layoutId="active-pill"
-                    className="absolute right-4 w-1.5 h-1.5 bg-black rounded-full" 
+                    className="right-4 absolute bg-black rounded-full w-1.5 h-1.5" 
                   />
                 )}
               </>
@@ -79,7 +79,7 @@ export function Sidebar() {
         ))}
       </nav>
 
-      <div className="p-8 mt-auto space-y-2">
+      <div className="space-y-2 mt-auto p-8">
         <NavLink 
           to="/settings"
           className={({ isActive }) => cn(
@@ -88,11 +88,11 @@ export function Sidebar() {
           )}
         >
           <Settings className="w-5 h-5" />
-          <span className="text-base font-bold">Settings</span>
+          <span className="font-bold text-base">Settings</span>
         </NavLink>
-        <button className="flex items-center gap-4 px-4 h-14 w-full rounded-[20px] text-[#bbbbbb] hover:text-red-500 transition-all text-left group">
-          <LogOut className="w-5 h-5 group-hover:scale-110 transition-transform" />
-          <span className="text-base font-bold">Logout</span>
+        <button className="flex items-center gap-4 px-4 rounded-[20px] w-full h-14 text-[#bbbbbb] text-left hover:text-red-500 transition-all group">
+          <LogOut className="group-hover:scale-110 w-5 h-5 transition-transform" />
+          <span className="font-bold text-base">Logout</span>
         </button>
       </div>
     </aside>

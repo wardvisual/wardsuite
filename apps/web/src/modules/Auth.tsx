@@ -48,47 +48,47 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col lg:flex-row overflow-hidden font-sans">
-      <div className="lg:w-[50%] p-12 lg:p-24 flex flex-col justify-between relative bg-white">
+    <div className="flex lg:flex-row flex-col bg-white min-h-screen font-sans overflow-hidden">
+      <div className="relative flex flex-col justify-between bg-white p-12 lg:p-24 lg:w-[50%]">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
+          <div className="flex justify-center items-center bg-black rounded-full w-10 h-10">
             <Zap className="w-6 h-6 text-white fill-white" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-black">WISED</span>
+          <span className="font-bold text-black text-xl tracking-tight">WardSuite</span>
         </div>
 
         <div className="max-w-xl">
-          <h1 className="text-[64px] lg:text-[84px] font-black leading-[1.0] tracking-tight text-black mb-8">
+          <h1 className="mb-8 font-black text-[64px] text-black lg:text-[84px] leading-[1.0] tracking-tight">
             Experience <br />
-            <span className="text-[#cccccc] font-medium italic">the next</span> <br />
+            <span className="font-medium text-[#cccccc] italic">the next</span> <br />
             Sales Protocol.
           </h1>
-          <p className="text-[#6b7280] text-xl font-medium leading-relaxed max-w-md">
-            Join the global network of high-performance teams using WisedCRM to scale their revenue infrastructure.
+          <p className="max-w-md font-medium text-[#6b7280] text-xl leading-relaxed">
+            Join the global network of high-performance teams using WardSuiteCRM to scale their revenue infrastructure.
           </p>
 
-          <div className="mt-12 flex items-center gap-6">
+          <div className="flex items-center gap-6 mt-12">
             <div className="flex -space-x-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-14 h-14 rounded-2xl bg-[#f5f5f5] border-4 border-white shadow-sm" />
+                <div key={i} className="border-4 border-white bg-[#f5f5f5] shadow-sm rounded-2xl w-14 h-14" />
               ))}
             </div>
             <div>
-              <p className="text-base font-black text-black">42.5k Members</p>
-              <p className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">Active Platforms</p>
+              <p className="font-black text-base text-black">42.5k Members</p>
+              <p className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">Active Platforms</p>
             </div>
           </div>
         </div>
 
         <div className="flex gap-12">
-          <span className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">Trusted by LeadGen AI</span>
-          <span className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">ISO Certified</span>
-          <span className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">GDPR Compliant</span>
+          <span className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">Trusted by LeadGen AI</span>
+          <span className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">ISO Certified</span>
+          <span className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">GDPR Compliant</span>
         </div>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-8 lg:p-24 bg-white border-l border-[#f1f1f1]">
-        <div className="w-full max-w-[420px] space-y-12">
+      <div className="flex flex-1 justify-center items-center border-[#f1f1f1] bg-white p-8 lg:p-24 border-l">
+        <div className="space-y-12 w-full max-w-[420px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={mode}
@@ -98,10 +98,10 @@ export default function Auth() {
               className="space-y-12"
             >
               <div className="space-y-4">
-                <h2 className="text-[64px] font-bold tracking-tight text-black leading-none">
+                <h2 className="font-bold text-[64px] text-black leading-none tracking-tight">
                   {mode === 'login' ? 'Sign In' : mode === 'register' ? 'Join Us' : 'Reset'}
                 </h2>
-                <p className="text-[#9ca3af] text-lg font-medium leading-tight">
+                <p className="font-medium text-[#9ca3af] text-lg leading-tight">
                   {mode === 'login'
                     ? 'Enter your credentials to access your workspace.'
                     : mode === 'register'
@@ -111,13 +111,13 @@ export default function Auth() {
               </div>
 
               {error && (
-                <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-700 font-medium">
+                <div className="bg-red-50 p-4 border border-red-100 rounded-2xl font-medium text-red-700 text-sm">
                   {error}
                 </div>
               )}
 
               {mode === 'login' && (
-                <p className="text-xs text-[#9ca3af] font-medium -mt-8">
+                <p className="-mt-8 font-medium text-[#9ca3af] text-xs">
                   Demo: <span className="font-bold">admin@wardsuite.com</span> / <span className="font-bold">admin123</span>
                 </p>
               )}
@@ -127,26 +127,26 @@ export default function Auth() {
                   {mode === 'register' && (
                     <>
                       <div className="space-y-3">
-                        <label className="text-[10px] font-black text-[#9ca3af] uppercase tracking-widest ml-1">Workspace ID</label>
+                        <label className="ml-1 font-black text-[#9ca3af] text-[10px] uppercase tracking-widest">Workspace ID</label>
                         <div className="relative group">
-                          <Building className="w-5 h-5 absolute left-6 top-1/2 -translate-y-1/2 text-[#bbbbbb] group-focus-within:text-black transition-colors" />
+                          <Building className="group-focus-within:text-black top-1/2 left-6 absolute w-5 h-5 text-[#bbbbbb] transition-colors -translate-y-1/2" />
                           <input
                             type="text"
                             required
                             placeholder="acme-corp"
-                            className="w-full h-16 pl-14 pr-6 bg-white border-2 border-[#eeeeee] focus:border-black rounded-[24px] outline-none transition-all font-medium text-black text-lg"
+                            className="border-[#eeeeee] border-2 bg-white pr-6 pl-14 focus:border-black rounded-[24px] w-full h-16 font-medium text-black text-lg transition-all outline-none"
                           />
                         </div>
                       </div>
                       <div className="space-y-3">
-                        <label className="text-[10px] font-black text-[#9ca3af] uppercase tracking-widest ml-1">Full Name</label>
+                        <label className="ml-1 font-black text-[#9ca3af] text-[10px] uppercase tracking-widest">Full Name</label>
                         <div className="relative group">
-                          <User className="w-5 h-5 absolute left-6 top-1/2 -translate-y-1/2 text-[#bbbbbb] group-focus-within:text-black transition-colors" />
+                          <User className="group-focus-within:text-black top-1/2 left-6 absolute w-5 h-5 text-[#bbbbbb] transition-colors -translate-y-1/2" />
                           <input
                             type="text"
                             required
                             placeholder="John Doe"
-                            className="w-full h-16 pl-14 pr-6 bg-white border-2 border-[#eeeeee] focus:border-black rounded-[24px] outline-none transition-all font-medium text-black text-lg"
+                            className="border-[#eeeeee] border-2 bg-white pr-6 pl-14 focus:border-black rounded-[24px] w-full h-16 font-medium text-black text-lg transition-all outline-none"
                           />
                         </div>
                       </div>
@@ -154,16 +154,16 @@ export default function Auth() {
                   )}
 
                   <div className="space-y-3">
-                    <label className="text-[10px] font-black text-[#9ca3af] uppercase tracking-widest ml-1">Workspace Email</label>
+                    <label className="ml-1 font-black text-[#9ca3af] text-[10px] uppercase tracking-widest">Workspace Email</label>
                     <div className="relative group">
-                      <Mail className="w-5 h-5 absolute left-6 top-1/2 -translate-y-1/2 text-[#bbbbbb] group-focus-within:text-black transition-colors" />
+                      <Mail className="group-focus-within:text-black top-1/2 left-6 absolute w-5 h-5 text-[#bbbbbb] transition-colors -translate-y-1/2" />
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="admin@wardsuite.com"
-                        className="w-full h-16 pl-14 pr-6 bg-white border-2 border-[#eeeeee] focus:border-black rounded-[24px] outline-none transition-all font-medium text-black text-lg"
+                        className="border-[#eeeeee] border-2 bg-white pr-6 pl-14 focus:border-black rounded-[24px] w-full h-16 font-medium text-black text-lg transition-all outline-none"
                       />
                     </div>
                   </div>
@@ -171,26 +171,26 @@ export default function Auth() {
                   {mode !== 'forgot-password' && (
                     <div className="space-y-3">
                       <div className="flex justify-between items-center px-1">
-                        <label className="text-[10px] font-black text-[#9ca3af] uppercase tracking-widest">Secure Password</label>
+                        <label className="font-black text-[#9ca3af] text-[10px] uppercase tracking-widest">Secure Password</label>
                         {mode === 'login' && (
                           <button
                             type="button"
                             onClick={() => setMode('forgot-password')}
-                            className="text-[10px] font-black text-black uppercase tracking-widest hover:underline"
+                            className="font-black text-[10px] text-black hover:underline uppercase tracking-widest"
                           >
                             Forgot?
                           </button>
                         )}
                       </div>
                       <div className="relative group">
-                        <Lock className="w-5 h-5 absolute left-6 top-1/2 -translate-y-1/2 text-[#bbbbbb] group-focus-within:text-black transition-colors" />
+                        <Lock className="group-focus-within:text-black top-1/2 left-6 absolute w-5 h-5 text-[#bbbbbb] transition-colors -translate-y-1/2" />
                         <input
                           type="password"
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          className="w-full h-16 pl-14 pr-6 bg-[#fafafa] border-2 border-transparent focus:border-black focus:bg-white rounded-[24px] outline-none transition-all font-medium text-black text-lg"
+                          className="border-2 bg-[#fafafa] focus:bg-white pr-6 pl-14 border-transparent focus:border-black rounded-[24px] w-full h-16 font-medium text-black text-lg transition-all outline-none"
                         />
                       </div>
                     </div>
@@ -200,7 +200,7 @@ export default function Auth() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full h-[72px] bg-black text-white rounded-full font-bold flex items-center justify-center gap-4 hover:opacity-90 transition-all shadow-2xl shadow-black/10 text-base uppercase tracking-[0.2em] disabled:opacity-60"
+                  className="flex justify-center items-center gap-4 bg-black hover:opacity-90 disabled:opacity-60 shadow-2xl shadow-black/10 rounded-full w-full h-[72px] font-bold text-base text-white uppercase tracking-[0.2em] transition-all"
                 >
                   {loading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
@@ -215,35 +215,35 @@ export default function Auth() {
 
               {mode === 'login' && (
                 <>
-                  <div className="relative py-4 flex items-center justify-center">
-                    <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#f1f1f1]" /></div>
-                    <span className="relative px-6 bg-white text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">Or continue with</span>
+                  <div className="relative flex justify-center items-center py-4">
+                    <div className="absolute inset-0 flex items-center"><div className="border-[#f1f1f1] border-t w-full" /></div>
+                    <span className="relative bg-white px-6 font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">Or continue with</span>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <button type="button" className="h-14 bg-white border border-[#eeeeee] rounded-2xl flex items-center justify-center gap-4 hover:bg-gray-50 transition-all">
+                  <div className="gap-4 grid grid-cols-2">
+                    <button type="button" className="flex justify-center items-center gap-4 border-[#eeeeee] bg-white hover:bg-gray-50 border rounded-2xl h-14 transition-all">
                       <Chrome className="w-4 h-4 text-black" />
-                      <span className="text-[11px] font-black uppercase tracking-widest text-black">Google</span>
+                      <span className="font-black text-[11px] text-black uppercase tracking-widest">Google</span>
                     </button>
-                    <button type="button" className="h-14 bg-white border border-[#eeeeee] rounded-2xl flex items-center justify-center gap-4 hover:bg-gray-50 transition-all">
+                    <button type="button" className="flex justify-center items-center gap-4 border-[#eeeeee] bg-white hover:bg-gray-50 border rounded-2xl h-14 transition-all">
                       <Github className="w-4 h-4 text-black" />
-                      <span className="text-[11px] font-black uppercase tracking-widest text-black">Github</span>
+                      <span className="font-black text-[11px] text-black uppercase tracking-widest">Github</span>
                     </button>
                   </div>
                 </>
               )}
 
-              <div className="text-center pt-6 space-y-4">
+              <div className="space-y-4 pt-6 text-center">
                 {mode === 'login' ? (
-                  <p className="text-base font-medium text-[#9ca3af]">
+                  <p className="font-medium text-[#9ca3af] text-base">
                     New to the protocol?{' '}
-                    <button type="button" onClick={() => setMode('register')} className="text-black font-bold hover:underline">
+                    <button type="button" onClick={() => setMode('register')} className="font-bold text-black hover:underline">
                       Create Account
                     </button>
                   </p>
                 ) : mode === 'register' ? (
-                  <p className="text-base font-medium text-[#9ca3af]">
+                  <p className="font-medium text-[#9ca3af] text-base">
                     Already on the grid?{' '}
-                    <button type="button" onClick={() => setMode('login')} className="text-black font-bold hover:underline">
+                    <button type="button" onClick={() => setMode('login')} className="font-bold text-black hover:underline">
                       Log in
                     </button>
                   </p>
@@ -251,7 +251,7 @@ export default function Auth() {
                   <button
                     type="button"
                     onClick={() => setMode('login')}
-                    className="flex items-center gap-2 mx-auto text-sm font-bold text-black hover:underline uppercase tracking-widest"
+                    className="flex items-center gap-2 mx-auto font-bold text-black text-sm hover:underline uppercase tracking-widest"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     Back to login

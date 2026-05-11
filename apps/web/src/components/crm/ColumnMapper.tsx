@@ -64,26 +64,26 @@ export function ColumnMapper({ isOpen, onClose, onImport, csvHeaders, csvRows }:
       className="max-w-4xl"
     >
       <div className="space-y-8">
-        <div className="bg-blue-50/50 p-6 rounded-3xl border border-blue-100 flex gap-4">
-           <div className="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center shrink-0">
+        <div className="flex gap-4 bg-blue-50/50 p-6 border border-blue-100 rounded-3xl">
+           <div className="flex justify-center items-center bg-blue-500 rounded-xl w-10 h-10 shrink-0">
               <AlertCircle className="w-6 h-6 text-white" />
            </div>
            <div>
-              <h4 className="text-blue-900 font-bold">Align Data Columns</h4>
-              <p className="text-blue-700 text-sm font-medium mt-1">
-                 Ensure your spreadsheet headers correspond to WisedCRM data fields for perfect integration.
+              <h4 className="font-bold text-blue-900">Align Data Columns</h4>
+              <p className="mt-1 font-medium text-blue-700 text-sm">
+                 Ensure your spreadsheet headers correspond to WardSuiteCRM data fields for perfect integration.
               </p>
            </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-12 gap-y-6">
+        <div className="gap-x-12 gap-y-6 grid grid-cols-2">
            {LEAD_FIELDS.map((field) => (
              <div key={field.key} className="space-y-3">
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                    <div className="flex items-center gap-2">
                       <field.icon className="w-4 h-4 text-[#6b7280]" />
-                      <span className="text-sm font-bold text-[#111111]">{field.label}</span>
-                      {field.required && <span className="text-red-500 text-[10px] uppercase font-black">Required</span>}
+                      <span className="font-bold text-[#111111] text-sm">{field.label}</span>
+                      {field.required && <span className="font-black text-[10px] text-red-500 uppercase">Required</span>}
                    </div>
                 </div>
                 <select 
@@ -105,7 +105,7 @@ export function ColumnMapper({ isOpen, onClose, onImport, csvHeaders, csvRows }:
            ))}
         </div>
 
-        <div className="flex justify-end gap-3 pt-6 border-t border-[#f1f1f1]">
+        <div className="flex justify-end gap-3 border-[#f1f1f1] pt-6 border-t">
            <button onClick={onClose} className="btn-secondary">Cancel</button>
            <button 
              disabled={!isComplete}
