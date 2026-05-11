@@ -4,7 +4,7 @@
 
 WardSuite is a personal ERP built from frustration with existing tools that are either too expensive, too rigid, or missing the cross-module visibility that operations teams actually need. Starting with CRM and Supply Chain, expanding toward a full business operating system.
 
-![WardSuite ERP](https://raw.githubusercontent.com/wardvisual/wardsuite/refs/heads/main/public/banner.jpg?token=GHSAT0AAAAAACMTPIR2IDRJFBIJ3K2UMPQK2QBTSVQ)
+![WardSuite ERP](https://github.com/wardvisual/wardsuite/blob/main/public/banner.jpg?raw=true)
 
 ---
 
