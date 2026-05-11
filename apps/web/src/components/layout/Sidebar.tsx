@@ -11,6 +11,7 @@ import {
   User,
   Target,
   CreditCard,
+  X,
 } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { motion } from 'motion/react';
@@ -27,11 +28,37 @@ const navItems = [
   { icon: CreditCard, label: 'Billing', path: '/dashboard/billing' },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   return (
-    <aside className="top-0 left-0 z-20 fixed flex flex-col bg-white w-[280px] h-screen overflow-hidden">
-      <div className="flex items-center px-8 h-24 shrink-0">
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div
+          className="lg:hidden z-30 fixed inset-0 bg-black/40 backdrop-blur-sm"
+          onClick={onClose}
+        />
+      )}
+    <aside className={cn(
+      'top-0 left-0 z-40 fixed flex flex-col bg-white w-[280px] h-screen overflow-hidden transition-transform duration-300',
+      'lg:translate-x-0',
+      isOpen ? 'translate-x-0' : '-translate-x-full'
+    )}>
+      <div className="flex items-center justify-between px-8 h-24 shrink-0">
         <Logo size="sm" />
+        <button
+          type="button"
+          title="Close menu"
+          onClick={onClose}
+          className="lg:hidden p-2 rounded-xl hover:bg-[#f5f5f5] text-[#bbbbbb] hover:text-black transition-all"
+        >
+          <X className="w-5 h-5" aria-hidden="true" />
+          <span className="sr-only">Close menu</span>
+        </button>
       </div>
 
       <nav className="flex-1 space-y-2 mt-8 px-6 overflow-y-auto">
@@ -80,11 +107,12 @@ export function Sidebar() {
           <Settings className="w-5 h-5" />
           <span className="font-bold text-base">Settings</span>
         </NavLink>
-        <button className="flex items-center gap-4 px-4 rounded-[20px] w-full h-14 text-[#bbbbbb] text-left hover:text-red-500 transition-all group">
+        <button type="button" className="flex items-center gap-4 px-4 rounded-[20px] w-full h-14 text-[#bbbbbb] text-left hover:text-red-500 transition-all group">
           <LogOut className="group-hover:scale-110 w-5 h-5 transition-transform" />
           <span className="font-bold text-base">Logout</span>
         </button>
       </div>
     </aside>
+    </>
   );
 }
