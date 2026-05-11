@@ -194,7 +194,7 @@ function DemoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          className="z-[100] fixed inset-0 flex justify-center items-center bg-black/60 backdrop-blur-sm p-4"
           onClick={onClose}
         >
           <motion.div
@@ -202,28 +202,28 @@ function DemoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="relative bg-white rounded-[28px] overflow-hidden shadow-2xl max-w-4xl w-full"
+            className="relative bg-white shadow-2xl rounded-[28px] w-full max-w-4xl overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-[#f1f1f1]">
+            <div className="flex justify-between items-center border-[#f1f1f1] px-6 py-4 border-b">
               <div className="flex items-center gap-3">
                 <PlayCircle className="w-5 h-5 text-[#6b7280]" />
-                <span className="font-bold text-sm text-[#111111]">WardSuite — Product Demo</span>
+                <span className="font-bold text-[#111111] text-sm">WardSuite — Product Demo</span>
               </div>
               <button
                 type="button"
                 onClick={onClose}
                 aria-label="Close demo"
-                className="p-2 hover:bg-[#f5f5f5] rounded-xl transition-colors text-[#6b7280] hover:text-black"
+                className="hover:bg-[#f5f5f5] p-2 rounded-xl text-[#6b7280] hover:text-black transition-colors"
               >
                 <X className="w-4 h-4" aria-hidden="true" />
               </button>
             </div>
             <div className="p-2">
               <img
-                src="/demo.gif"
+                src="https://github.com/wardvisual/wardsuite/blob/main/public/banner.jpg?raw=true"
                 alt="WardSuite product demo"
-                className="w-full rounded-2xl"
+                className="rounded-2xl w-full"
               />
             </div>
           </motion.div>
