@@ -1,6 +1,11 @@
 import { motion } from 'motion/react';
-import { ArrowRight, CheckCircle, Shield, Zap, BarChart3, PlayCircle, Target, DollarSign, Users, TrendingUp, Calendar, ArrowUpRight, Github, ExternalLink } from 'lucide-react';
+import {
+  ArrowRight, CheckCircle, Shield, Zap, BarChart3, PlayCircle,
+  Target, DollarSign, Users, TrendingUp, Calendar, ArrowUpRight,
+  Github, ExternalLink, LayoutGrid, BookOpen,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Logo } from '@/src/components/ui/Logo';
 
 const DUMMY_BARS = [18, 32, 26, 48, 38, 62, 50, 74, 58, 70, 82, 91];
 const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -23,15 +28,7 @@ function DashboardPreview() {
   return (
     <div className="flex border-[#f1f1f1] bg-[#fafafa] border rounded-[28px] h-[580px] overflow-hidden">
       <aside className="md:flex flex-col gap-8 border-[#f1f1f1] hidden bg-white p-6 border-r w-56 shrink-0">
-        <div className="flex items-center gap-3">
-          <div className="flex justify-center items-center bg-black rounded-lg w-8 h-8 shrink-0">
-            <span className="font-bold text-white text-xs">W</span>
-          </div>
-          <div>
-            <p className="font-bold text-black text-sm leading-tight">WardSuite ERP</p>
-            <p className="font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">Enterprise</p>
-          </div>
-        </div>
+        <Logo size="xs" className="px-1" />
         <nav className="space-y-1">
           {[
             { label: 'Dashboard', active: true },
@@ -145,12 +142,7 @@ function LandingFooter() {
       <div className="mx-auto px-6 py-16 max-w-7xl">
         <div className="gap-12 grid grid-cols-12">
           <div className="space-y-6 col-span-4">
-            <div className="flex items-center gap-2.5">
-              <div className="flex justify-center items-center bg-black rounded-lg w-8 h-8">
-                <span className="font-bold text-white text-xs">W</span>
-              </div>
-              <span className="font-bold text-xl tracking-tight">WardSuite ERP</span>
-            </div>
+            <Logo size="sm" />
             <p className="max-w-xs font-medium text-[#6b7280] text-sm leading-relaxed">
               A personal ERP vision — built in public. CRM, SCM, and beyond, crafted for real operational complexity.
             </p>
@@ -166,7 +158,8 @@ function LandingFooter() {
           </div>
           <div className="space-y-4 col-span-2">
             <p className="font-black text-[#111111] text-[10px] uppercase tracking-[0.2em]">Developer</p>
-            {['Case Study', 'GitHub', 'Roadmap', 'Changelog'].map(l => (
+            <Link to="/case-study" className="block font-medium text-[#6b7280] text-sm hover:text-black transition-colors">Case Study</Link>
+            {['GitHub', 'Roadmap', 'Changelog'].map(l => (
               <p key={l} className="font-medium text-[#6b7280] text-sm hover:text-black transition-colors cursor-pointer">{l}</p>
             ))}
           </div>
@@ -197,17 +190,25 @@ export default function Landing() {
     <div className="bg-white min-h-screen overflow-hidden">
       <nav className="top-0 right-0 left-0 z-50 fixed border-[#f1f1f1] bg-white/80 backdrop-blur-md border-b">
         <div className="flex justify-between items-center mx-auto px-6 max-w-7xl h-20">
-          <div className="flex items-center gap-2.5"> 
-            <img src="/public/logo-w-bg.jpg" alt="WardSuite" className="h-8 w-8"  />
+          <Logo size="xs" />
+
+          <div className="md:flex items-center gap-1 hidden">
+            <a href="#features" className="flex items-center gap-1.5 hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-medium text-[#6b7280] text-sm hover:text-black transition-all">
+              <LayoutGrid className="w-3.5 h-3.5" />Platform
+            </a>
+            <Link to="/case-study" className="flex items-center gap-1.5 hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-medium text-[#6b7280] text-sm hover:text-black transition-all">
+              <BookOpen className="w-3.5 h-3.5" />Case Study
+            </Link>
+            <a href="https://github.com/wardvisual" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-medium text-[#6b7280] text-sm hover:text-black transition-all">
+              <Github className="w-3.5 h-3.5" />GitHub
+            </a>
           </div>
-          <div className="md:flex items-center gap-8 hidden">
-            <a href="#features" className="font-medium text-[#6b7280] text-sm hover:text-black transition-colors">Platform</a>
-            <a href="#casestudy" className="font-medium text-[#6b7280] text-sm hover:text-black transition-colors">Case Study</a>
-            <a href="https://github.com/wardvisual" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 font-medium text-[#6b7280] text-sm hover:text-black transition-colors"><Github className="w-4 h-4" />wardvisual</a>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link to="/login" className="hover:opacity-70 font-semibold text-sm transition-opacity">Sign In</Link>
-            <Link to="/login" className="bg-black hover:opacity-90 px-5 py-2.5 rounded-full font-semibold text-sm text-white transition-opacity">Get Access</Link>
+
+          <div className="flex items-center gap-3">
+            <Link to="/login" className="hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-semibold text-sm transition-all">Sign In</Link>
+            <Link to="/login" className="flex items-center gap-1.5 bg-black hover:opacity-90 px-5 py-2.5 rounded-full font-semibold text-sm text-white transition-opacity">
+              Get Access <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </nav>
