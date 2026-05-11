@@ -22,14 +22,12 @@ const TRANSACTION_HISTORY = [
 export default function Billing() {
   return (
     <div className="space-y-12">
-      <div className="flex justify-between items-end">
-        <div className="space-y-2">
-          <h2 className="text-[42px] font-black tracking-tight text-black leading-tight">Financial Protocol</h2>
-          <p className="text-[#6b7280] text-lg font-medium">Manage your enterprise subscription and fiscal history.</p>
-        </div>
+      <div>
+        <h2 className="text-2xl sm:text-[42px] font-black tracking-tight text-black leading-tight">Financial Protocol</h2>
+        <p className="text-[#6b7280] text-sm sm:text-lg font-medium mt-2">Manage your enterprise subscription and fiscal history.</p>
       </div>
 
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
         {/* Active Plan Card */}
         <div className="col-span-12 lg:col-span-8 p-10 floating-card bg-black text-white relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -112,7 +110,7 @@ export default function Billing() {
         </div>
 
         {/* Transaction History */}
-        <div className="col-span-12 p-10 floating-card">
+        <div className="col-span-12 p-6 lg:p-10 floating-card overflow-x-auto">
            <div className="flex items-center justify-between mb-10">
               <div className="flex items-center gap-4">
                  <History className="w-6 h-6 text-black" />

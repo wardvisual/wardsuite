@@ -49,12 +49,12 @@ const COLORS = ['#000000', '#333333', '#666666', '#999999'];
 export default function Analytics() {
   return (
     <div className="space-y-12">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-2">
-          <h2 className="text-[42px] font-black tracking-tight text-black leading-tight">Data Intelligence</h2>
-          <p className="text-[#6b7280] text-lg font-medium">Deep dive into your organization's performance metrics.</p>
+          <h2 className="text-2xl sm:text-[42px] font-black tracking-tight text-black leading-tight">Data Intelligence</h2>
+          <p className="text-[#6b7280] text-sm sm:text-lg font-medium">Deep dive into your organization's performance metrics.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 shrink-0">
           <button className="flex items-center gap-2 px-6 h-14 bg-gray-50 border border-[#f1f1f1] rounded-[20px] text-sm font-black uppercase tracking-widest hover:bg-white hover:shadow-sm transition-all">
             <Calendar className="w-4 h-4" />
             Last 30 Days
@@ -62,7 +62,7 @@ export default function Analytics() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-8">
         {[
           { label: 'Conversion Rate', value: '4.2%', change: '+12%', icon: Target, up: true },
           { label: 'Avg Deal Size', value: '$12.4k', change: '+8%', icon: DollarSign, up: true },
@@ -94,8 +94,8 @@ export default function Analytics() {
         ))}
       </div>
 
-      <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-8 p-10 floating-card">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+        <div className="lg:col-span-8 p-6 lg:p-10 floating-card">
           <div className="flex justify-between items-center mb-10">
             <div className="space-y-1">
               <h3 className="text-xl font-black tracking-tight">Revenue Trajectory</h3>
@@ -152,7 +152,7 @@ export default function Analytics() {
           </div>
         </div>
 
-        <div className="col-span-4 p-10 floating-card flex flex-col">
+        <div className="lg:col-span-4 p-6 lg:p-10 floating-card flex flex-col">
           <div className="space-y-1 mb-10">
             <h3 className="text-xl font-black tracking-tight">Channel Distribution</h3>
             <p className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">Lead origination sources</p>

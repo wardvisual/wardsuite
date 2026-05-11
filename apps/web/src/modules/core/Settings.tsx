@@ -67,12 +67,12 @@ export default function Settings() {
 
   return (
     <div className="space-y-12">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-2">
-          <h2 className="text-[42px] font-black tracking-tight text-black leading-tight">System Console</h2>
-          <p className="text-[#6b7280] text-lg font-medium tracking-tight">Fine-tune your environment and security parameters.</p>
+          <h2 className="text-2xl sm:text-[42px] font-black tracking-tight text-black leading-tight">System Console</h2>
+          <p className="text-[#6b7280] text-sm sm:text-lg font-medium tracking-tight">Fine-tune your environment and security parameters.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 shrink-0">
           {error && <p className="text-sm text-red-500 font-medium">{error}</p>}
           {saved && (
             <span className="flex items-center gap-2 text-sm text-green-600 font-bold">
@@ -99,8 +99,8 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="grid grid-cols-12 gap-12">
-        <div className="col-span-4 space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12">
+        <div className="lg:col-span-4 space-y-8">
           <div className="p-2 floating-card">
             {tabs.map((tab) => (
               <button
@@ -155,7 +155,7 @@ export default function Settings() {
           </div>
         </div>
 
-        <div className="col-span-8">
+        <div className="lg:col-span-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
