@@ -7,7 +7,7 @@
     "dev": "concurrently -n \"API,WEB\" -c \"cyan,magenta\" \"npm run dev:api\" \"npm run dev:web\"",
     "dev:api": "tsx --env-file=.env apps/api/main.ts",
     "dev:web": "cd apps/web && vite",
-    "build": "vite build --config apps/web/vite.config.ts && esbuild apps/api/main.ts --bundle --platform=node --format=esm --outfile=dist/server.js --external:vite",
+    "build": "vite build --config apps/web/vite.config.ts && esbuild apps/api/main.ts --bundle --platform=node --format=esm --packages=external --outfile=dist/server.js",
     "start": "node dist/server.js",
     "start:pm2": "pm2 start ecosystem.config.js --env production",
     "stop:pm2": "pm2 stop wardsuite-api",
