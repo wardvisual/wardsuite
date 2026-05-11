@@ -188,7 +188,7 @@ function LandingFooter() {
 export default function Landing() {
   return (
     <div className="bg-white min-h-screen overflow-hidden">
-      <nav className="top-0 right-0 left-0 z-50 fixed border-[#f1f1f1] bg-white/80 backdrop-blur-md border-b">
+      <nav className="top-0 right-0 left-0 z-50 floating-card fixed bg-white/80 backdrop-blur-md border-b">
         <div className="flex justify-between items-center mx-auto px-6 max-w-7xl h-20">
           <Logo size="xs" />
 
@@ -214,30 +214,77 @@ export default function Landing() {
       </nav>
 
       <section className="px-6 pt-32 pb-20">
-        <div className="space-y-8 mx-auto max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="space-y-6">
-            <div className="inline-flex items-center gap-2 border-[#f1f1f1] bg-[#fafafa] px-4 py-2 border rounded-full font-black text-[#6b7280] text-[11px] uppercase tracking-[0.2em]">
-              <div className="bg-green-500 rounded-full w-1.5 h-1.5 animate-pulse" /> Built in Public · Personal ERP Vision
-            </div>
-            <h1 className="mx-auto max-w-4xl font-bold text-5xl md:text-7xl leading-[1.08] tracking-tight">
-              One Platform.<br /><span className="text-[#6b7280]">Every Revenue Operation.</span>
-            </h1>
-          </motion.div>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} className="mx-auto max-w-2xl font-medium text-[#6b7280] text-lg md:text-xl leading-relaxed">
-            WardSuite consolidates CRM, supply chain, procurement, and financial reporting into a single intelligent workspace — built for enterprises that demand operational clarity at scale.
-          </motion.p>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} className="flex sm:flex-row flex-col justify-center items-center gap-4">
-            <Link to="/login" className="flex items-center gap-2 bg-black hover:opacity-90 shadow-black/10 shadow-xl px-8 py-4 rounded-full font-bold text-base text-white transition-all">Start for Free <ArrowRight className="w-5 h-5" /></Link>
-            <button type="button" className="flex items-center gap-2 border-[#e5e7eb] bg-white hover:bg-gray-50 px-8 py-4 border rounded-full font-bold text-base text-black transition-all"><PlayCircle className="w-5 h-5" />Watch Demo</button>
-          </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="flex justify-center items-center gap-8 pt-4">
-            {['SOC 2 Ready', 'GDPR Compliant', 'Open Source'].map(b => (
-              <div key={b} className="flex items-center gap-2 font-bold text-[#6b7280] text-[11px] uppercase tracking-widest">
-                <CheckCircle className="w-3.5 h-3.5 text-green-500" />{b}
-              </div>
-            ))}
-          </motion.div>
-        </div>
+      <div className="space-y-8 mx-auto max-w-7xl text-center">
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    className="space-y-7"
+  >
+    <div className="flex justify-center items-center gap-3">
+      <div className="bg-[#d1d5db] w-10 h-px" />
+      <span className="font-black text-[#6b7280] text-[11px] uppercase tracking-[0.25em]">
+        Revenue Operations Platform
+      </span>
+      <div className="bg-[#d1d5db] w-10 h-px" />
+    </div>
+
+    <h1 className="mx-auto max-w-5xl font-bold text-5xl text-black md:text-7xl leading-[1.08] tracking-tight">
+      Close deals without
+      <br />
+      <span className="text-[#6b7280]">losing operational context.</span>
+    </h1>
+  </motion.div>
+
+  <motion.p
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: 0.2 }}
+    className="mx-auto max-w-3xl font-medium text-[#6b7280] text-lg md:text-xl leading-relaxed"
+  >
+    WardSuite brings leads, customer records, stock visibility, supply chain coordination, and audit tracking into one workflow so revenue teams and operations teams stay aligned from quote to delivery.
+  </motion.p>
+
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: 0.4 }}
+    className="flex sm:flex-row flex-col justify-center items-center gap-4"
+  >
+    <Link
+      to="/login"
+      className="flex items-center gap-2 bg-black hover:opacity-90 shadow-black/10 shadow-xl px-8 py-4 rounded-full font-bold text-base text-white transition-all"
+    >
+      Start for Free
+      <ArrowRight className="w-5 h-5" />
+    </Link>
+
+    <button
+      type="button"
+      className="flex items-center gap-2 border-[#e5e7eb] bg-white hover:bg-gray-50 px-8 py-4 border rounded-full font-bold text-base text-black transition-all"
+    >
+      <PlayCircle className="w-5 h-5" />
+      Watch Demo
+    </button>
+  </motion.div>
+
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ delay: 0.8 }}
+    className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 pt-4"
+  >
+   {['Full Audit Trail', 'One Shared Source of Truth', 'Open Source'].map((b) => (
+      <div
+        key={b}
+        className="flex items-center gap-2 font-bold text-[#6b7280] text-[11px] uppercase tracking-widest"
+      >
+        <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+        {b}
+      </div>
+    ))}
+  </motion.div>
+</div>
       </section>
 
       <section className="px-6 pb-28">
