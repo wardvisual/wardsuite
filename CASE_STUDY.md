@@ -1,6 +1,6 @@
 # Building WardSuite ERP: A Personal Vision for the Business Operating System I Always Wanted
 
-**By Eduardo Manlangit Jr. (wardvisual)**
+**By Eduardo. (wardvisual)**
 *Full-Stack Developer · Open Source Builder*
 
 ---
@@ -211,10 +211,10 @@ If you're a developer reading this and thinking *"I want to build something like
 
 - **Live demo**: Sign in with `admin@wardsuite.com` / `admin123`
 - **Source code**: [github.com/wardvisual](https://github.com/wardvisual)
-- **Built by**: Eduardo Manlangit Jr. — [@wardvisual](https://github.com/wardvisual)
+- **Built by**: Eduardo. — [@wardvisual](https://github.com/wardvisual)
 
 ---
 
 *This case study was written as both a technical retrospective and a public record of the vision behind WardSuite. Updates will follow as the platform grows.*
 
-*© 2025 Eduardo Manlangit Jr. — MIT License*
+*© 2025 Eduardo. — MIT License*

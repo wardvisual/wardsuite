@@ -1,11 +1,10 @@
 # WardSuite ERP
 
-> A personal ERP system built in public — by [Eduardo Manlangit Jr.](https://github.com/wardvisual) (wardvisual).
+> A modular ERP for growing operations, built in public.
 
-WardSuite is a production-grade, modular Enterprise Resource Planning platform designed from personal experience with the gaps left by existing business software. Starting with a full-featured CRM and Supply Chain module, it's built to scale into a complete business operating system.
+WardSuite is a modular Enterprise Resource Planning platform designed from personal experience with the gaps left by existing business software. My main focus is building a practical, connected system for growing operations — starting with CRM and Supply Chain, expanding into a full business operating system.
 
-![WardSuite Dashboard](docs/images/homepage-screenshot-placeholder.png)
-*← Replace this placeholder with a screenshot of the live homepage*
+![WardSuite ERP](/public/banner.jpg)
 
 ---
 
@@ -42,7 +41,7 @@ Most ERP systems are either too expensive, too rigid, or too generic. WardSuite 
 ## Monorepo Structure
 
 ```
-wardsuitepro/
+wardsuite/
 ├── apps/
 │   ├── web/                   # React SPA (Vite + Tailwind)
 │   └── api/                   # Express API server
@@ -82,8 +81,8 @@ wardsuitepro/
 ### 1. Clone and Install
 
 ```bash
-git clone https://github.com/wardvisual/wardsuitepro.git
-cd wardsuitepro
+git clone https://github.com/wardvisual/wardsuite.git
+cd wardsuite
 npm install
 ```
 
@@ -300,7 +299,7 @@ npm run logs:pm2
 
 ## Author
 
-**Eduardo Manlangit Jr.** — [@wardvisual](https://github.com/wardvisual)
+**Eduardo.** — [@wardvisual](https://github.com/wardvisual)
 
 > *"I tried different ERP and CRM applications and none of them quite fit. So I built my own — in public."*
 
@@ -310,4 +309,4 @@ This project is a personal proof of concept and a statement of technical intent.
 
 ## License
 
-[MIT](./LICENSE) © 2025 Eduardo Manlangit Jr.
+[MIT](./LICENSE) © 2025 Eduardo.
