@@ -57,7 +57,7 @@ function DashboardPreview() {
           </div>
         </div>
 
-        <div className="gap-3 grid grid-cols-4 shrink-0">
+        <div className="gap-3 grid grid-cols-2 sm:grid-cols-4 shrink-0">
           {DUMMY_STATS.map((stat, i) => (
             <motion.div key={i} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="floating-card space-y-2 p-4">
               <div className="flex justify-between items-start">
@@ -74,7 +74,7 @@ function DashboardPreview() {
           ))}
         </div>
 
-        <div className="flex-1 gap-4 grid grid-cols-12 min-h-0">
+        <div className="flex-1 gap-4 hidden sm:grid grid-cols-12 min-h-0">
           <div className="floating-card flex flex-col col-span-8 p-5">
             <div className="flex justify-between items-center mb-3 shrink-0">
               <div className="flex items-center gap-2">
@@ -140,8 +140,8 @@ function LandingFooter() {
   return (
     <footer className="border-[#f1f1f1] bg-white border-t">
       <div className="mx-auto px-6 py-16 max-w-7xl">
-        <div className="gap-12 grid grid-cols-12">
-          <div className="space-y-6 col-span-4">
+        <div className="gap-12 grid grid-cols-1 sm:grid-cols-12">
+          <div className="space-y-6 sm:col-span-4">
             <Logo size="sm" />
             <p className="max-w-xs font-medium text-[#6b7280] text-sm leading-relaxed">
               A personal ERP vision — built in public. CRM, SCM, and beyond, crafted for real operational complexity.
@@ -150,27 +150,27 @@ function LandingFooter() {
               <Github className="w-4 h-4" /> wardvisual
             </a>
           </div>
-          <div className="space-y-4 col-span-2 col-start-6">
+          <div className="space-y-4 sm:col-span-2 sm:col-start-6">
             <p className="font-black text-[#111111] text-[10px] uppercase tracking-[0.2em]">Platform</p>
             {['CRM Pipeline', 'Supply Chain', 'Analytics', 'Dashboard', 'Settings'].map(l => (
               <p key={l} className="font-medium text-[#6b7280] text-sm hover:text-black transition-colors cursor-pointer">{l}</p>
             ))}
           </div>
-          <div className="space-y-4 col-span-2">
+          <div className="space-y-4 sm:col-span-2">
             <p className="font-black text-[#111111] text-[10px] uppercase tracking-[0.2em]">Developer</p>
             <Link to="/case-study" className="block font-medium text-[#6b7280] text-sm hover:text-black transition-colors">Case Study</Link>
             {['GitHub', 'Roadmap', 'Changelog'].map(l => (
               <p key={l} className="font-medium text-[#6b7280] text-sm hover:text-black transition-colors cursor-pointer">{l}</p>
             ))}
           </div>
-          <div className="space-y-4 col-span-2">
+          <div className="space-y-4 sm:col-span-2">
             <p className="font-black text-[#111111] text-[10px] uppercase tracking-[0.2em]">Legal</p>
             {['MIT License', 'Privacy Policy', 'Terms of Use'].map(l => (
               <p key={l} className="font-medium text-[#6b7280] text-sm hover:text-black transition-colors cursor-pointer">{l}</p>
             ))}
           </div>
         </div>
-        <div className="flex justify-between items-center border-[#f5f5f5] mt-16 pt-8 border-t">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-[#f5f5f5] mt-16 pt-8 border-t">
           <p className="font-bold text-[#bbbbbb] text-[11px] uppercase tracking-widest">
             © {new Date().getFullYear()} Eduardo. — Built as a personal ERP vision.
           </p>
