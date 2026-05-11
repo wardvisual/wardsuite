@@ -6,4 +6,4 @@ dist
 .git
 .gitignore
 *.md
-bun.lock
+package-lock.json
