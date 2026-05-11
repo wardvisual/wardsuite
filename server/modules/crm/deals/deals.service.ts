@@ -1,4 +1,4 @@
-import { db } from '../../../core/database/firestore.client';
+import { db } from '@server/core/database/firestore.client';
 import { Deal, CreateDealDto, UpdateDealDto, DealStage } from './deals.dto';
 
 const COLLECTION = 'crm_deals';

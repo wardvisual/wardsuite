@@ -6,6 +6,7 @@ import Suppliers from './modules/scm/Suppliers';
 import Products from './modules/scm/Products';
 import Leads from './modules/crm/Leads';
 import Customers from './modules/crm/Customers';
+import Activities from './modules/crm/Activities';
 import ActivityLogs from './modules/core/ActivityLogs';
 import Settings from './modules/core/Settings';
 import Pipeline from './modules/Pipeline';
@@ -210,6 +211,7 @@ export default function App() {
               <Route path="/scm/products" element={<Products />} />
               <Route path="/crm/leads" element={<Leads />} />
               <Route path="/crm/customers" element={<Customers />} />
+              <Route path="/crm/activities" element={<Activities />} />
               <Route path="/pipeline" element={<Pipeline />} />
               <Route path="/activity" element={<ActivityLogs />} />
               <Route path="/analytics" element={<Analytics />} />

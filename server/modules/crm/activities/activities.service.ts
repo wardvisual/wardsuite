@@ -1,4 +1,4 @@
-import { db } from '../../../core/database/firestore.client';
+import { db } from '@server/core/database/firestore.client';
 import { Activity, CreateActivityDto } from './activities.dto';
 
 const COLLECTION = 'crm_activities';

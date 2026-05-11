@@ -43,10 +43,10 @@ export function ColumnMapper({ isOpen, onClose, onImport, csvHeaders, csvRows }:
   const handleImport = () => {
     const mappedData = csvRows.map(row => {
       const item: any = {};
-      Object.entries(mappings).forEach(([fieldKey, csvHeader]) => {
+      Object.entries(mappings).forEach(([fieldKey, csvHeader]: [string, string]) => {
         const headerIndex = csvHeaders.indexOf(csvHeader);
         if (headerIndex !== -1) {
-          item[fieldKey] = row[headerIndex];
+          item[fieldKey] = String(row[headerIndex] ?? '');
         }
       });
       return item;

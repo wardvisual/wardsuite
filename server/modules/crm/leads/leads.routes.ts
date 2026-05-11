@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { leadsService } from './leads.service';
-import { customersService } from '../customers/customers.service';
-import { activitiesService } from '../activities/activities.service';
-import { ok, fail } from '../../../core/utils/response';
-import { resolveActor } from '../../../core/middleware/auth.middleware';
+import { customersService } from '@server/modules/crm/customers/customers.service';
+import { activitiesService } from '@server/modules/crm/activities/activities.service';
+import { ok, fail } from '@server/core/utils/response';
+import { resolveActor } from '@server/core/middleware/auth.middleware';
 
 const router = Router();
 

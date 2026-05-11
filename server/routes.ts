@@ -1,22 +1,22 @@
 import { Router } from 'express';
 
 // Auth
-import authRoutes from './modules/auth/auth.routes';
+import authRoutes from '@server/modules/auth/auth.routes';
 
 // Dashboard
-import dashboardRoutes from './modules/dashboard/dashboard.routes';
+import dashboardRoutes from '@server/modules/dashboard/dashboard.routes';
 
 // CRM
-import leadsRoutes from './modules/crm/leads/leads.routes';
-import customersRoutes from './modules/crm/customers/customers.routes';
-import dealsRoutes from './modules/crm/deals/deals.routes';
-import activitiesRoutes from './modules/crm/activities/activities.routes';
+import leadsRoutes from '@server/modules/crm/leads/leads.routes';
+import customersRoutes from '@server/modules/crm/customers/customers.routes';
+import dealsRoutes from '@server/modules/crm/deals/deals.routes';
+import activitiesRoutes from '@server/modules/crm/activities/activities.routes';
 
 // SCM
-import suppliersRoutes from './modules/scm/suppliers/suppliers.routes';
-import productsRoutes from './modules/scm/products/products.routes';
-import purchaseRequestsRoutes from './modules/scm/purchase-requests/purchase-requests.routes';
-import stockMovementsRoutes from './modules/scm/stock-movements/stock-movements.routes';
+import suppliersRoutes from '@server/modules/scm/suppliers/suppliers.routes';
+import productsRoutes from '@server/modules/scm/products/products.routes';
+import purchaseRequestsRoutes from '@server/modules/scm/purchase-requests/purchase-requests.routes';
+import stockMovementsRoutes from '@server/modules/scm/stock-movements/stock-movements.routes';
 
 const router = Router();
 

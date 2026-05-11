@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { stockMovementsService } from './stock-movements.service';
-import { ok, fail } from '../../../core/utils/response';
+import { ok, fail } from '@server/core/utils/response';
 
 const VALID_TYPES = ['in', 'out', 'adjustment'];
 

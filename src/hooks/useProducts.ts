@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, query, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '@/src/lib/firebase';
+
 import { Product } from '@/src/types';
 
 export function useProducts() {

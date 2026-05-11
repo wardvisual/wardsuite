@@ -60,7 +60,8 @@ export function LeadKanban({ leads, onLeadClick, onStatusChange }: LeadKanbanPro
                   >
                     <AnimatePresence mode="popLayout">
                       {stageLeads.map((lead, index) => (
-                        <Draggable key={lead.id} draggableId={lead.id} index={index}>
+                        <React.Fragment key={lead.id}>
+                        <Draggable draggableId={lead.id} index={index}>
                           {(provided, snapshot) => (
                             <div
                               ref={provided.innerRef}
@@ -101,6 +102,7 @@ export function LeadKanban({ leads, onLeadClick, onStatusChange }: LeadKanbanPro
                             </div>
                           )}
                         </Draggable>
+                        </React.Fragment>
                       ))}
                     </AnimatePresence>
                     {provided.placeholder}

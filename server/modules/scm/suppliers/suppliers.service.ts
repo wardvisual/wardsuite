@@ -1,4 +1,4 @@
-import { db } from '../../../core/database/firestore.client';
+import { db } from '@server/core/database/firestore.client';
 import { Supplier, CreateSupplierDto, UpdateSupplierDto } from './suppliers.dto';
 
 const COLLECTION = 'scm_suppliers';

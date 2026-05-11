@@ -1,6 +1,6 @@
-import { db } from '../../../core/database/firestore.client';
+import { db } from '@server/core/database/firestore.client';
 import { StockMovement, CreateStockMovementDto } from './stock-movements.dto';
-import { productsService } from '../products/products.service';
+import { productsService } from '@server/modules/scm/products/products.service';
 
 const COLLECTION = 'scm_stock_movements';
 

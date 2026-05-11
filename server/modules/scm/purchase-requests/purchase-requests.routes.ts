@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { purchaseRequestsService } from './purchase-requests.service';
-import { ok, fail } from '../../../core/utils/response';
+import { ok, fail } from '@server/core/utils/response';
 
 const VALID_STATUSES = ['draft', 'submitted', 'approved', 'rejected', 'ordered', 'received'];
 

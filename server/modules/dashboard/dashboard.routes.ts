@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { dashboardService } from './dashboard.service';
-import { ok, fail } from '../../core/utils/response';
+import { ok, fail } from '@server/core/utils/response';
 
 const router = Router();
 

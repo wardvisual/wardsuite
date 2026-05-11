@@ -1,4 +1,4 @@
-import { db } from '../../../core/database/firestore.client';
+import { db } from '@server/core/database/firestore.client';
 import { PurchaseRequest, CreatePurchaseRequestDto, UpdatePurchaseRequestDto, PurchaseRequestStatus } from './purchase-requests.dto';
 
 const COLLECTION = 'scm_purchase_requests';

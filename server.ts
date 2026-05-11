@@ -3,8 +3,8 @@ import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import { fileURLToPath } from 'url';
-import apiRoutes from './server/routes';
-import { errorMiddleware } from './server/core/middleware/error.middleware';
+import apiRoutes from '@server/routes';
+import { errorMiddleware } from '@server/core/middleware/error.middleware';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

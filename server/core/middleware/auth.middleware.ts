@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { authService } from '../../modules/auth/auth.service';
+import { authService } from '@server/modules/auth/auth.service';
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization?.replace('Bearer ', '');
