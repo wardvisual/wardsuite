@@ -50,7 +50,7 @@ export default function Auth() {
 
   return (
     <div className="flex lg:flex-row flex-col bg-white min-h-screen font-sans overflow-hidden">
-      <div className="relative flex flex-col justify-between bg-white p-12 lg:p-24 lg:w-[50%]">
+      <div className="hidden lg:relative lg:flex flex-col justify-between bg-white p-12 lg:p-24 lg:w-[50%]">
         <Logo size="sm" />
 
         <div className="max-w-xl">
@@ -83,8 +83,11 @@ export default function Auth() {
         </div>
       </div>
 
-      <div className="flex flex-1 justify-center items-center border-[#f1f1f1] bg-white p-8 lg:p-24 border-l">
-        <div className="space-y-12 w-full max-w-[420px]">
+      <div className="flex flex-1 justify-center items-center border-[#f1f1f1] bg-white p-8 lg:p-24 lg:border-l">
+        <div className="space-y-10 lg:space-y-12 w-full max-w-[420px]">
+          <div className="lg:hidden">
+            <Logo size="sm" />
+          </div>
           <AnimatePresence mode="wait">
             <motion.div
               key={mode}
@@ -94,7 +97,7 @@ export default function Auth() {
               className="space-y-12"
             >
               <div className="space-y-4">
-                <h2 className="font-bold text-[64px] text-black leading-none tracking-tight">
+                <h2 className="font-bold text-[40px] sm:text-[64px] text-black leading-none tracking-tight">
                   {mode === 'login' ? 'Sign In' : mode === 'register' ? 'Join Us' : 'Reset'}
                 </h2>
                 <p className="font-medium text-[#9ca3af] text-lg leading-tight">
