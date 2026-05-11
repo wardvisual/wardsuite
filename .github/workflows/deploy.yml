@@ -18,9 +18,16 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
+            DEPLOY_DIR=/opt/wardsuite
+
+            echo "── Ensure deploy directory exists ───────────"
+            if [ ! -d "$DEPLOY_DIR/.git" ]; then
+              echo "First deploy — cloning repo..."
+              git clone https://github.com/wardvisual/wardsuite.git "$DEPLOY_DIR"
+            fi
 
             echo "── Pulling latest code ──────────────────────"
-            cd /opt/wardsuite
+            cd "$DEPLOY_DIR"
             git fetch origin main
             git reset --hard origin/main
 
