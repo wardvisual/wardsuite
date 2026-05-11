@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import apiRoutes from '@server/routes';
@@ -12,12 +13,16 @@ async function bootstrap() {
   const app = express();
   const PORT = Number(process.env.PORT ?? 3000);
 
+  app.use(cors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') ?? '*',
+    credentials: true,
+  }));
   app.use(express.json());
   app.use('/api', apiRoutes);
   app.use(errorMiddleware);
 
   if (process.env.NODE_ENV === 'production') {
-    const distPath = path.resolve(__dirname, '../../dist/web');
+    const distPath = path.resolve(process.cwd(), 'dist/web');
     app.use(express.static(distPath));
     app.get('*', (_req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }

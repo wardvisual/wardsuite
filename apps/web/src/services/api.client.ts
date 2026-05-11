@@ -8,15 +8,16 @@ async function request<T>(
   options: RequestInit = {},
 ): Promise<ApiResponse<T>> {
   const token = getStoredToken();
-  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
+  const headers = new Headers({ 'Content-Type': 'application/json' });
+  if (token) headers.set('Authorization', `Bearer ${token}`);
+  if (options.headers) {
+    new Headers(options.headers).forEach((v, k) => headers.set(k, v));
+  }
 
   const res = await fetch(`${BASE_URL}${path}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...authHeader,
-      ...options.headers,
-    },
     ...options,
+    headers,
   });
 
   const json: ApiResponse<T> = await res.json();
