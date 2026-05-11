@@ -1,6 +1,6 @@
-# WardSuite ERP — Proof of Concept
+# WardSuite ERP
 
-A modular ERP proof of concept demonstrating SCM (Supply Chain Management) and CRM (Customer Relationship Management) built on React + Node.js + TypeScript with Firestore as the real-time document store.
+A modular, production-ready ERP proof of concept with SCM (Supply Chain Management) and CRM (Customer Relationship Management) modules, built on React + Express + TypeScript + Firestore.
 
 ---
 
@@ -8,17 +8,15 @@ A modular ERP proof of concept demonstrating SCM (Supply Chain Management) and C
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 19, TypeScript, Tailwind CSS v4, React Router v7 |
-| Backend | Node.js, Express.js, TypeScript |
-| Real-time DB | Firestore (Firebase v12) |
-| Build / Dev | Vite 6, esbuild, tsx |
-| Forms | React Hook Form, Zod |
+| Frontend | React 19, Vite, Tailwind CSS v4, Motion |
+| State | Zustand (auth + UI), React hooks per module |
+| Backend | Express 4, TypeScript, tsx |
+| Database | Firestore (Firebase Admin SDK) |
+| Auth | Token-based sessions (in-memory, swap for JWT/Redis in prod) |
+| Drag & Drop | @hello-pangea/dnd |
 | Tables | TanStack Table v8 |
-| Charts | Recharts |
-
-### Why Firestore?
-
-Firestore handles flexible document-style records (activity logs, audit trails, notifications) and provides real-time listeners for live dashboard updates. In a production system, structured transactional data (users, suppliers, products, deals) would live in MySQL; this PoC keeps all persistence in-memory on the server and uses Firestore listeners on the frontend for real-time sync.
+| Deployment | Docker + docker-compose, PM2 |
+| Build | Vite (frontend), esbuild (API bundle) |
 
 ---
 
@@ -26,119 +24,105 @@ Firestore handles flexible document-style records (activity logs, audit trails, 
 
 ```
 wardsuitepro/
-├── server.ts                     # Express entry point
-├── server/
-│   ├── routes/
-│   │   ├── index.ts              # Main router — mounts all sub-routers
-│   │   ├── authRoutes.ts         # /api/auth/*
-│   │   ├── statsRoutes.ts        # /api/dashboard/stats
-│   │   ├── scm/
-│   │   │   ├── supplierRoutes.ts
-│   │   │   ├── productRoutes.ts
-│   │   │   ├── purchaseRequestRoutes.ts
-│   │   │   └── stockMovementRoutes.ts
-│   │   └── crm/
-│   │       ├── leadRoutes.ts
-│   │       ├── customerRoutes.ts
-│   │       ├── dealRoutes.ts
-│   │       └── activityRoutes.ts
-│   ├── services/                 # Business logic layer
-│   ├── dto/                      # Request shape interfaces
-│   ├── types/
-│   │   └── models.ts             # All entity interfaces and enums
-│   ├── middleware/
-│   │   └── errorHandler.ts       # Global Express error handler
-│   └── utils/
-│       └── response.ts           # ok() / fail() response helpers
+├── src/                        # React frontend
+│   ├── components/
+│   │   ├── auth/               # AuthGuard (route protection)
+│   │   ├── crm/                # CRM components (leads, deals, activities)
+│   │   ├── layout/             # Shell, Sidebar
+│   │   └── ui/                 # Shared UI: Modals, DataTable, Skeleton
+│   ├── hooks/
+│   │   ├── crm/                # useLeads, useCustomers, useDeals, useActivities
+│   │   └── useDashboardStats
+│   ├── modules/
+│   │   ├── crm/                # Leads, Customers, Activities pages
+│   │   ├── scm/                # Suppliers, Products pages
+│   │   └── core/               # Settings, ActivityLogs
+│   ├── services/               # REST API clients (auth, leads, customers, deals…)
+│   ├── store/
+│   │   └── auth.store.ts       # Zustand auth store (persisted)
+│   └── types.ts
 │
-└── src/                          # React frontend
-    ├── modules/
-    │   ├── crm/  (Leads, Customers)
-    │   ├── scm/  (Suppliers, Products)
-    │   └── core/ (ActivityLogs, Settings)
-    ├── components/
-    ├── hooks/
-    └── lib/
-        └── firebase.ts           # Firestore + Auth initialisation
+├── server/                     # Express API
+│   ├── core/
+│   │   ├── database/           # Firestore client, seed, migrations
+│   │   └── middleware/         # auth.middleware, error.middleware
+│   └── modules/
+│       ├── auth/               # Login, logout, /me
+│       ├── crm/                # leads, customers, deals, activities
+│       ├── dashboard/
+│       └── scm/                # suppliers, products, purchase-requests, stock-movements
+│
+├── ecosystem.config.js         # PM2 config
+├── Dockerfile                  # Multi-stage Docker build
+├── docker-compose.yml          # VPS deployment
+├── nx.json                     # NX workspace config
+├── firestore.rules
+├── firestore.indexes.json
+└── server.ts                   # Express entry point
 ```
 
 ---
 
-## How to Run
+## Getting Started
+
+### Prerequisites
+- Node.js 22+
+- Firebase project with Firestore enabled
+- `.env` file (see below)
+
+### Environment Variables
+
+Copy `.env.example` (or create `.env`) with:
+
+```env
+# Firebase Admin (server)
+FIREBASE_PROJECT_ID=your-project-id
+FIREBASE_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+
+# Firebase Web SDK (Vite frontend)
+VITE_FIREBASE_API_KEY=...
+VITE_FIREBASE_AUTH_DOMAIN=...
+VITE_FIREBASE_PROJECT_ID=...
+VITE_FIREBASE_STORAGE_BUCKET=...
+VITE_FIREBASE_MESSAGING_SENDER_ID=...
+VITE_FIREBASE_APP_ID=...
+
+# Optional: named Firestore database
+VITE_FIREBASE_DATABASE_ID=
+```
+
+### Development
 
 ```bash
 npm install
-npm run dev        # starts Express + Vite on http://localhost:3000
+
+# Start API server (port 3000, serves frontend via /api)
+npm run dev
+
+# Or run frontend dev server separately (HMR)
+npm run dev:web
 ```
 
-Production:
+### Database Setup
 
 ```bash
-npm run build
-npm start
+# Seed Firestore with demo data
+npm run firebase:seed
+
+# Run pending migrations
+npm run firebase:migrate
+
+# Deploy Firestore security rules
+npm run firebase:rules
+
+# Deploy Firestore indexes
+npm run firebase:indexes
 ```
 
 ---
 
-## Available Modules
-
-### SCM — Supply Chain Management
-
-| Module | Description |
-|---|---|
-| Suppliers | Supplier master records — CRUD + search |
-| Products | Product catalog with low-stock detection |
-| Purchase Requests | Multi-line purchase orders with status workflow |
-| Stock Movements | In / Out / Adjustment with automatic stock update |
-
-### CRM — Customer Relationship Management
-
-| Module | Description |
-|---|---|
-| Leads | Lead pipeline with status filter and CSV import/export |
-| Customers | Customer master records; auto-created on lead conversion |
-| Deals | Sales opportunities with stage tracking |
-| Activities | Call, meeting, note, email log linked to any entity |
-
-### Core
-
-| Module | Description |
-|---|---|
-| Auth | Login / logout / me with in-memory token sessions |
-| Dashboard | Live aggregated stats from all modules |
-
----
-
-## API Reference
-
-### Response Envelope
-
-```json
-{
-  "success": true,
-  "message": "Data fetched successfully",
-  "data": [],
-  "meta": { "total": 10 }
-}
-```
-
-Error:
-
-```json
-{ "success": false, "message": "Validation error message" }
-```
-
----
-
-### Auth  `/api/auth`
-
-| Method | Path | Body / Notes |
-|---|---|---|
-| POST | `/api/auth/login` | `{ email, password }` |
-| POST | `/api/auth/logout` | `Authorization: Bearer <token>` |
-| GET | `/api/auth/me` | `Authorization: Bearer <token>` |
-
-**Demo accounts**
+## Demo Credentials
 
 | Email | Password | Role |
 |---|---|---|
@@ -148,140 +132,97 @@ Error:
 
 ---
 
-### SCM — Suppliers  `/api/scm/suppliers`
+## Authentication Flow
 
-| Method | Path | Notes |
+1. User submits login form → POST `/api/auth/login`
+2. Server returns `{ token, user }` → stored in Zustand (`persist` → `localStorage`)
+3. `api.client.ts` reads the token from `localStorage` and injects `Authorization: Bearer <token>` on every request
+4. `AuthGuard` wraps all protected routes — redirects to `/login` if unauthenticated
+5. 401 responses automatically clear the session and redirect to login
+
+---
+
+## Production Deployment
+
+### Docker (recommended for VPS)
+
+```bash
+# Build image
+npm run docker:build
+
+# Start container
+npm run docker:up
+
+# Tail logs
+npm run docker:logs
+
+# Stop
+npm run docker:down
+```
+
+### PM2 (direct on VPS)
+
+```bash
+npm run build
+npm run start:pm2
+
+# Logs
+npm run logs:pm2
+
+# Stop
+npm run stop:pm2
+```
+
+---
+
+## NX Workspace
+
+The project uses [NX](https://nx.dev) for task orchestration and caching. Projects are defined in `nx.json`:
+
+| Project | Root | Type |
 |---|---|---|
-| GET | `/api/scm/suppliers` | `?search=` |
-| GET | `/api/scm/suppliers/:id` | |
-| POST | `/api/scm/suppliers` | name, contactPerson, email, phone, address required |
-| PUT | `/api/scm/suppliers/:id` | |
-| DELETE | `/api/scm/suppliers/:id` | |
+| `web` | `.` | React SPA (Vite) |
+| `api` | `server/` | Express API |
+
+```bash
+# Install NX CLI (optional, scripts work without it)
+npm install -g nx
+
+# Run tasks
+nx build web
+nx dev api
+```
 
 ---
 
-### SCM — Products  `/api/scm/products`
+## Modules
 
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/api/scm/products` | `?search=` |
-| GET | `/api/scm/products/:id` | |
-| POST | `/api/scm/products` | name, category, unit, costPrice, sellingPrice, currentStock, reorderLevel required |
-| PUT | `/api/scm/products/:id` | |
-| DELETE | `/api/scm/products/:id` | |
+### CRM
+- **Leads** — Kanban + table view, CSV import with column mapper, status drag-and-drop
+- **Customers** — Full CRUD, customer cards
+- **Pipeline** — Deal Kanban (open → proposal → negotiation → won/lost), drag-and-drop stage changes
+- **Activities** — Timeline log with type filters (call, meeting, note, email, audit)
 
----
+### SCM
+- **Suppliers** — Supplier management
+- **Products** — Product catalog with stock levels
 
-### SCM — Purchase Requests  `/api/scm/purchase-requests`
-
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/api/scm/purchase-requests` | |
-| GET | `/api/scm/purchase-requests/:id` | |
-| POST | `/api/scm/purchase-requests` | supplierId, requestedById, items[] required |
-| PUT | `/api/scm/purchase-requests/:id` | |
-| PATCH | `/api/scm/purchase-requests/:id/status` | `{ status }` |
-
-Statuses: `draft` > `submitted` > `approved` > `ordered` > `received` (or `rejected`)
+### Core
+- **Dashboard** — Revenue stats, pipeline summary
+- **Settings** — Profile, security, alerts, regional preferences (reads from auth store)
+- **Activity Logs** — System-wide audit trail
 
 ---
 
-### SCM — Stock Movements  `/api/scm/stock-movements`
+## Scripts Reference
 
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/api/scm/stock-movements` | `?productId=` |
-| POST | `/api/scm/stock-movements` | productId, quantity, type, reference required; auto-adjusts stock |
-
-Types: `in`, `out`, `adjustment`
-
----
-
-### CRM — Leads  `/api/crm/leads`
-
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/api/crm/leads` | `?status=&search=` |
-| GET | `/api/crm/leads/:id` | |
-| POST | `/api/crm/leads` | fullName, company, email, phone, source required |
-| PUT | `/api/crm/leads/:id` | |
-| DELETE | `/api/crm/leads/:id` | |
-| POST | `/api/crm/leads/:id/convert` | Creates customer, sets lead status to `won` |
-
-Statuses: `new`, `contacted`, `qualified`, `proposal`, `won`, `lost`
-
----
-
-### CRM — Customers  `/api/crm/customers`
-
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/api/crm/customers` | `?search=` |
-| GET | `/api/crm/customers/:id` | |
-| POST | `/api/crm/customers` | name, company, email, phone, address required |
-| PUT | `/api/crm/customers/:id` | |
-| DELETE | `/api/crm/customers/:id` | |
-
----
-
-### CRM — Deals  `/api/crm/deals`
-
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/api/crm/deals` | `?stage=` |
-| GET | `/api/crm/deals/:id` | |
-| POST | `/api/crm/deals` | title, customerId, amount, ownerId, expectedCloseDate required |
-| PUT | `/api/crm/deals/:id` | |
-| PATCH | `/api/crm/deals/:id/stage` | `{ stage }` |
-| DELETE | `/api/crm/deals/:id` | |
-
-Stages: `open`, `negotiation`, `proposal`, `won`, `lost`
-
----
-
-### CRM — Activities  `/api/crm/activities`
-
-| Method | Path | Notes |
-|---|---|---|
-| GET | `/api/crm/activities` | `?relatedEntity=lead&relatedEntityId=1` |
-| POST | `/api/crm/activities` | relatedEntity, relatedEntityId, type, description required |
-
-Types: `call`, `meeting`, `note`, `email`
-
----
-
-### Dashboard  `/api/dashboard/stats`
-
-Returns live aggregated counts from all module services.
-
----
-
-## Key Workflows
-
-### SCM Workflow
-1. Login — `POST /api/auth/login`
-2. Create supplier — `POST /api/scm/suppliers`
-3. Create product — `POST /api/scm/products`
-4. Create purchase request — `POST /api/scm/purchase-requests`
-5. Approve request — `PATCH /api/scm/purchase-requests/:id/status` with `{ "status": "approved" }`
-6. Record receipt — `POST /api/scm/stock-movements` with `{ "type": "in", ... }`
-
-### CRM Workflow
-1. Login — `POST /api/auth/login`
-2. Create lead — `POST /api/crm/leads`
-3. Qualify lead — `PUT /api/crm/leads/:id` with `{ "status": "qualified" }`
-4. Convert — `POST /api/crm/leads/:id/convert`
-5. Create deal — `POST /api/crm/deals`
-6. Log activity — `POST /api/crm/activities`
-7. Close deal — `PATCH /api/crm/deals/:id/stage` with `{ "stage": "won" }`
-
----
-
-## Architecture Notes
-
-- **Routes → Services** — routes handle HTTP concerns only; services own business logic and in-memory data.
-- **Swappable data layer** — replacing in-memory arrays with a Prisma/Knex repository requires changes only inside each service.
-- **Consistent response shape** — all endpoints use the `ok()` / `fail()` helpers in `server/utils/response.ts`.
-- **Stock auto-update** — `POST /scm/stock-movements` automatically adjusts `product.currentStock` via `productService.adjustStock()`.
-- **Lead conversion** — `POST /crm/leads/:id/convert` atomically creates a customer and marks the originating lead as `won`.
-- **Live dashboard** — `statsService.getStats()` pulls live counts from every module service at request time rather than caching.
+| Script | Description |
+|---|---|
+| `npm run dev` | Start API + serve built frontend |
+| `npm run dev:web` | Vite dev server with HMR |
+| `npm run build` | Build frontend (Vite) + bundle API (esbuild) |
+| `npm run lint` | TypeScript type check |
+| `npm run firebase:seed` | Seed Firestore with demo data |
+| `npm run firebase:migrate` | Run pending Firestore migrations |
+| `npm run docker:up` | Start Docker containers |
+| `npm run start:pm2` | Start with PM2 in production mode |
