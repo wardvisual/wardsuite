@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, workspaceRoot, '');
   return {
     root: __dirname,
+    publicDir: path.resolve(__dirname, '../../public'),
     envDir: workspaceRoot,
     plugins: [react(), tailwindcss()],
     define: {
