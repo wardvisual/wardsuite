@@ -146,7 +146,7 @@ function LandingFooter() {
             <p className="max-w-xs font-medium text-[#6b7280] text-sm leading-relaxed">
               A personal ERP vision — built in public. CRM, SCM, and beyond, crafted for real operational complexity.
             </p>
-            <a href="https://github.com/wardvisual" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:opacity-70 font-bold text-[#111111] text-sm transition-opacity">
+            <a href="https://github.com/wardvisual/wardsuite" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 hover:opacity-70 font-bold text-[#111111] text-sm transition-opacity">
               <Github className="w-4 h-4" /> wardvisual
             </a>
           </div>
@@ -199,7 +199,7 @@ export default function Landing() {
             <Link to="/case-study" className="flex items-center gap-1.5 hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-medium text-[#6b7280] text-sm hover:text-black transition-all">
               <BookOpen className="w-3.5 h-3.5" />Case Study
             </Link>
-            <a href="https://github.com/wardvisual" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-medium text-[#6b7280] text-sm hover:text-black transition-all">
+            <a href="https://github.com/wardvisual/wardsuite" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:bg-[#f5f5f5] px-4 py-2 rounded-full font-medium text-[#6b7280] text-sm hover:text-black transition-all">
               <Github className="w-3.5 h-3.5" />GitHub
             </a>
           </div>
@@ -343,7 +343,7 @@ export default function Landing() {
                 <Link to="/login" className="flex items-center gap-2 bg-white hover:bg-gray-100 shadow-black/20 shadow-xl px-8 py-4 rounded-full font-bold text-black text-sm transition-all">
                   Get Started <ArrowRight className="w-4 h-4" />
                 </Link>
-                <a href="https://github.com/wardvisual" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 border-white/20 hover:bg-white/10 px-8 py-4 border rounded-full font-bold text-sm text-white transition-all">
+                <a href="https://github.com/wardvisual/wardsuite" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 border-white/20 hover:bg-white/10 px-8 py-4 border rounded-full font-bold text-sm text-white transition-all">
                   <Github className="w-4 h-4" /> View on GitHub
                 </a>
               </div>
