@@ -21,6 +21,10 @@ import stockMovementsRoutes from '@server/modules/scm/stock-movements/stock-move
 
 const router = Router();
 
+router.get('/health', (_req, res) => {
+  res.json({ status: 'ok', uptime: process.uptime() });
+});
+
 router.use('/auth', authRoutes);
 router.use('/users', usersRoutes);
 router.use('/dashboard', dashboardRoutes);
