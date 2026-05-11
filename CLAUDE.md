@@ -536,3 +536,39 @@ npm run docker:up
 ```
 
 Environment variables live at the **workspace root** `.env`. Vite reads `VITE_*` vars via `envDir` set to workspace root in `apps/web/vite.config.ts`. The API reads all vars via `dotenv/config`.
+
+---
+
+## Git Workflow
+
+**The agent does not commit.** After making changes, output the exact `git add` and `git commit` commands for the developer to run manually. The developer (@wardvisual) is the sole author of all commits.
+
+### Rules
+- **Never run `git commit` yourself.** Always hand the commands to the developer.
+- **No Co-Authored-By lines.** Commits are authored by wardvisual only — do not add `Co-Authored-By: Claude` or any AI attribution.
+- **One commit per logical change.** Group related files; don't suggest `git add .` or `git add -A`.
+- **Conventional commit format** — `type(scope): description` where type is one of: `feat`, `fix`, `refactor`, `docs`, `chore`, `style`, `test`.
+
+### Commit message format
+
+```
+feat(web/crm): add invoice list page with sortable table
+
+- InvoiceColumns.tsx: TanStack Table column definitions
+- useInvoices.ts: fetch hook with loading/error state
+- invoices.api.ts: REST client for /crm/invoices
+```
+
+### Example output after changes
+
+After completing work, output commands like this:
+
+```bash
+git add apps/web/src/modules/CaseStudy.tsx apps/web/src/App.tsx
+git commit -m "feat(web): add public Case Study page at /case-study"
+
+git add apps/web/src/components/ui/Logo.tsx
+git commit -m "feat(web/ui): add reusable Logo component with size variants"
+```
+
+The developer reviews, adjusts if needed, and runs the commands themselves.
