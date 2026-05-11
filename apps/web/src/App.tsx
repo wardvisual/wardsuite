@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Package, Briefcase, Loader2, Target, DollarSign, Users, TrendingUp, Calendar, ArrowUpRight } from 'lucide-react';
 import { Shell } from './components/layout/Shell';
