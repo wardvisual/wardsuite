@@ -119,8 +119,8 @@ export default function Leads() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 print:hidden">
         <div className="space-y-2">
-          <h2 className="text-[42px] font-bold tracking-tight text-[#111111] leading-[1.1]">Leads</h2>
-          <p className="text-[#6b7280] text-lg font-medium">Convert potential opportunities into valuable customers.</p>
+          <h2 className="text-2xl sm:text-[42px] font-bold tracking-tight text-[#111111] leading-[1.1]">Leads</h2>
+          <p className="text-[#6b7280] text-sm sm:text-lg font-medium">Convert potential opportunities into valuable customers.</p>
         </div>
         <div className="flex flex-wrap gap-3 items-center">
           <div className="flex bg-gray-50 p-1 rounded-xl border border-[#f1f1f1]">

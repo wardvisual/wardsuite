@@ -51,12 +51,12 @@ export default function Activities() {
 
   return (
     <div className="space-y-10">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div className="space-y-2">
-          <h2 className="text-[42px] font-bold tracking-tight text-[#111111] leading-[1.1]">Activities</h2>
-          <p className="text-[#6b7280] text-lg font-medium">Track every interaction across your CRM pipeline.</p>
+          <h2 className="text-2xl sm:text-[42px] font-bold tracking-tight text-[#111111] leading-[1.1]">Activities</h2>
+          <p className="text-[#6b7280] text-sm sm:text-lg font-medium">Track every interaction across your CRM pipeline.</p>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-3 shrink-0">
           <button onClick={() => fetch({ type: typeFilter || undefined })} className="btn-secondary px-4">
             <RefreshCw className="w-4 h-4" />
           </button>
