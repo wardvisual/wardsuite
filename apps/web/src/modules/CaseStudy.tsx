@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { ArrowLeft, Github, ExternalLink, Calendar, Clock, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/src/components/ui/Logo';
+import { PublicImage } from '@/src/components/ui/PublicImage';
 
 const PHASES = [
   { phase: 'Phase 1', title: 'CRM Completion', items: ['Lead scoring & deal probability', 'Revenue forecast view', 'In-app notifications, email integration'] },
@@ -60,24 +61,19 @@ export default function CaseStudy() {
             <span className="text-[#6b7280]">A Personal Vision for the Business Operating System I Always Wanted</span>
           </h1>
           <div className="flex items-center gap-4 pt-2">
-            <div className="w-12 h-12 rounded-2xl overflow-hidden bg-[#f5f5f5] border border-[#f1f1f1]">
-              <img src="/logo-w-bg.jpg" alt="Eduardo" className="w-full h-full object-cover" />
+            <div className="border-[#f1f1f1] bg-[#f5f5f5] border rounded-2xl w-12 h-12 overflow-hidden">
+              <PublicImage file="me.png" alt="Eduardo." rounded={false} className="w-12 h-12" imgClassName="object-cover object-center" />
             </div>
             <div>
-              <p className="font-bold text-[#111111] text-sm">Eduardo Manlangit Jr.</p>
+              <p className="font-bold text-[#111111] text-sm">Eduardo.</p>
               <p className="font-bold text-[#9ca3af] text-[11px] uppercase tracking-widest">Full-Stack Developer · @wardvisual</p>
             </div>
           </div>
         </motion.header>
 
-        {/* Hero image placeholder */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} className="flex justify-center items-center border-[#f1f1f1] bg-[#fafafa] mb-16 border rounded-[24px] w-full h-72 overflow-hidden">
-          <div className="space-y-2 text-center">
-            <div className="flex justify-center items-center bg-[#eeeeee] mx-auto rounded-2xl w-16 h-16">
-              <img src="/logo-w-bg.jpg" alt="WardSuite" className="w-10 h-10 object-contain" />
-            </div>
-            <p className="font-bold text-[#bbbbbb] text-[11px] uppercase tracking-widest">Homepage screenshot</p>
-          </div>
+        {/* Hero image */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6 }} className="shadow-[0_32px_80px_-16px_rgba(0,0,0,0.1)] mb-16">
+          <PublicImage file="banner.jpg" alt="WardSuite ERP homepage" className="border-[#f1f1f1] border w-full h-auto" imgClassName="object-cover w-full" />
         </motion.div>
 
         <div className="space-y-16 text-[#111111]">
@@ -99,11 +95,11 @@ export default function CaseStudy() {
 
             <div className="space-y-8">
               {/* Decision 1 */}
-              <div className="floating-card p-8 space-y-4">
+              <div className="floating-card space-y-4 p-8">
                 <p className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">Decision 01</p>
                 <h3 className="font-bold text-xl tracking-tight">Database-Agnostic by Design</h3>
                 <p className="font-medium text-[#6b7280] leading-relaxed">I've seen too many codebases that are so tightly coupled to their database that a migration becomes a six-month project. WardSuite uses the repository pattern throughout — every service codes against an interface, not a concrete implementation.</p>
-                <div className="bg-[#fafafa] border border-[#f1f1f1] rounded-2xl p-5 font-mono text-sm text-[#111111] overflow-x-auto">
+                <div className="border-[#f1f1f1] bg-[#fafafa] p-5 border rounded-2xl font-mono text-[#111111] text-sm overflow-x-auto">
                   <pre>{`// Today: Firestore
 const repo = new FirestoreLeadRepository(db);
 
@@ -114,11 +110,11 @@ const repo = new PostgresLeadRepository(pgClient);`}</pre>
               </div>
 
               {/* Decision 2 */}
-              <div className="floating-card p-8 space-y-4">
+              <div className="floating-card space-y-4 p-8">
                 <p className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">Decision 02</p>
                 <h3 className="font-bold text-xl tracking-tight">Monorepo with Real Library Boundaries</h3>
                 <p className="font-medium text-[#6b7280] leading-relaxed">WardSuite uses an NX monorepo with genuine library separation — not just folders, but enforced boundaries between domains. Each library has a single public API. Nothing crosses boundaries except through those contracts.</p>
-                <div className="bg-[#fafafa] border border-[#f1f1f1] rounded-2xl p-5 font-mono text-sm text-[#111111] overflow-x-auto">
+                <div className="border-[#f1f1f1] bg-[#fafafa] p-5 border rounded-2xl font-mono text-[#111111] text-sm overflow-x-auto">
                   <pre>{`libs/
 ├── crm/domain/        # Entity interfaces + DTOs
 ├── crm/data-access/   # Repository interfaces + Firestore adapters
@@ -128,11 +124,11 @@ const repo = new PostgresLeadRepository(pgClient);`}</pre>
               </div>
 
               {/* Decision 3 */}
-              <div className="floating-card p-8 space-y-4">
+              <div className="floating-card space-y-4 p-8">
                 <p className="font-black text-[#bbbbbb] text-[10px] uppercase tracking-[0.2em]">Decision 03</p>
                 <h3 className="font-bold text-xl tracking-tight">Complete Audit Trail on Every Mutation</h3>
                 <p className="font-medium text-[#6b7280] leading-relaxed">In a real business context, you need to know who changed what, when, and why. WardSuite automatically logs an audit entry to Firestore on every CRM mutation — baked into the route layer as a convention, not bolted on.</p>
-                <div className="bg-[#fafafa] border border-[#f1f1f1] rounded-2xl p-5 font-mono text-sm text-[#111111] overflow-x-auto">
+                <div className="border-[#f1f1f1] bg-[#fafafa] p-5 border rounded-2xl font-mono text-[#111111] text-sm overflow-x-auto">
                   <pre>{`Lead "Acme Corp" (LD-042) created from source: referral.
 Deal "Q3 Renewal" moved from "proposal" → "won".
 Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
@@ -144,9 +140,9 @@ Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
           {/* Stack */}
           <motion.section initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="mb-6 font-bold text-2xl tracking-tight">The Stack</h2>
-            <div className="border border-[#f1f1f1] rounded-2xl overflow-hidden">
+            <div className="border-[#f1f1f1] border rounded-2xl overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-[#fafafa] border-[#f1f1f1] border-b">
+                <thead className="border-[#f1f1f1] bg-[#fafafa] border-b">
                   <tr>
                     {['Layer', 'Choice', 'Why'].map(h => (
                       <th key={h} className="px-6 py-4 font-black text-[#9ca3af] text-[10px] text-left uppercase tracking-[0.2em]">{h}</th>
@@ -155,7 +151,7 @@ Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
                 </thead>
                 <tbody>
                   {STACK.map((row, i) => (
-                    <tr key={i} className="border-[#f5f5f5] border-b last:border-0">
+                    <tr key={i} className="border-[#f5f5f5] last:border-0 border-b">
                       <td className="px-6 py-4 font-bold text-[#111111] text-sm">{row.layer}</td>
                       <td className="px-6 py-4 font-medium text-[#111111] text-sm">{row.choice}</td>
                       <td className="px-6 py-4 font-medium text-[#6b7280] text-sm">{row.why}</td>
@@ -170,14 +166,14 @@ Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
           <motion.section initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="mb-8 font-bold text-2xl tracking-tight">What I Built</h2>
 
-            {/* CRM Dashboard image placeholder */}
-            <div className="flex justify-center items-center border-[#f1f1f1] bg-[#fafafa] mb-6 border rounded-2xl w-full h-48">
-              <p className="font-bold text-[#cccccc] text-[11px] uppercase tracking-widest">CRM Dashboard screenshot</p>
+            {/* CRM Dashboard image */}
+            <div className="mb-6 rounded-2xl overflow-hidden shadow-[0_16px_48px_-12px_rgba(0,0,0,0.08)] border border-[#f1f1f1]">
+              <PublicImage file="crm-dashboard.png" alt="CRM Dashboard screenshot" rounded={false} className="w-full" imgClassName="w-full h-auto object-cover" />
             </div>
 
             <div className="space-y-6 font-medium text-[#4b5563] text-lg leading-relaxed">
               <p>The CRM is the heart of WardSuite. Every feature was designed around how sales teams actually work:</p>
-              <ul className="space-y-3 pl-6 list-disc marker:text-[#cccccc]">
+              <ul className="space-y-3 pl-6 marker:text-[#cccccc] list-disc">
                 <li><strong className="text-black">Lead Management</strong> — Kanban board with drag-and-drop status transitions. Bulk import via CSV with a column mapper.</li>
                 <li><strong className="text-black">Revenue Pipeline</strong> — Five-stage deal Kanban. Every column shows the total value of deals in that stage. Dropping a card fires a PATCH, updates the stage, and logs an audit entry — all in a single drag.</li>
                 <li><strong className="text-black">Real Analytics</strong> — Dashboard pulls live data: pipeline revenue, won revenue, conversion rate, 12-month revenue chart. No fake data. No hardcoded numbers.</li>
@@ -196,7 +192,7 @@ Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
                 { title: 'Build what you\'d use yourself', body: 'Every feature decision was filtered through: would I actually use this? The CSV import column mapper, the drag-to-convert pipeline, the audit trail — these exist because I\'ve been frustrated by their absence.' },
                 { title: 'Dummy data is dishonest', body: 'Early dashboard versions had hardcoded numbers. It looked great in screenshots but was useless. Rewiring everything to pull from Firestore fixed three bugs I didn\'t know existed.' },
               ].map((card, i) => (
-                <div key={i} className="floating-card p-6 space-y-3">
+                <div key={i} className="floating-card space-y-3 p-6">
                   <h3 className="font-bold text-base leading-tight">{card.title}</h3>
                   <p className="font-medium text-[#6b7280] text-sm leading-relaxed">{card.body}</p>
                 </div>
@@ -209,9 +205,9 @@ Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
             <h2 className="mb-8 font-bold text-2xl tracking-tight">Where It's Going</h2>
             <div className="space-y-4">
               {PHASES.map((p, i) => (
-                <div key={i} className="flex gap-6 items-start floating-card p-6">
+                <div key={i} className="floating-card flex items-start gap-6 p-6">
                   <div className="flex flex-col items-center gap-1 shrink-0">
-                    <div className="flex justify-center items-center bg-black rounded-2xl w-10 h-10 font-black text-white text-[11px] uppercase tracking-widest">{i + 1}</div>
+                    <div className="flex justify-center items-center bg-black rounded-2xl w-10 h-10 font-black text-[11px] text-white uppercase tracking-widest">{i + 1}</div>
                     {i < PHASES.length - 1 && <div className="bg-[#f1f1f1] w-px h-6" />}
                   </div>
                   <div className="flex-1 pt-1">
@@ -235,10 +231,10 @@ Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
               <div className="-bottom-12 -left-12 absolute bg-white/[0.02] blur-3xl rounded-full w-48 h-48" />
               <div className="relative z-10 space-y-6">
                 <div>
-                  <p className="font-black text-[10px] text-white/40 uppercase tracking-[0.4em] mb-3">Built in Public</p>
-                  <h3 className="font-bold text-3xl tracking-tight leading-tight">This is a proof of concept,<br />not a toy.</h3>
+                  <p className="mb-3 font-black text-[10px] text-white/40 uppercase tracking-[0.4em]">Built in Public</p>
+                  <h3 className="font-bold text-3xl leading-tight tracking-tight">This is a proof of concept,<br />not a toy.</h3>
                 </div>
-                <p className="max-w-lg font-medium text-white/60 text-base leading-relaxed">
+                <p className="max-w-lg font-medium text-base text-white/60 leading-relaxed">
                   If you're a business owner thinking <em>"I could actually use this"</em> — that's exactly the reaction I was hoping for. If you're a developer thinking <em>"I want to build something like this"</em> — the code is open and every decision is documented.
                 </p>
                 <div className="flex flex-wrap gap-4 pt-2">
@@ -263,7 +259,7 @@ Customer "TechBase Ltd" updated — status "inactive" → "active".`}</pre>
         <div className="flex justify-between items-center mx-auto px-6 py-8 max-w-4xl">
           <Logo size="xs" />
           <p className="font-bold text-[#bbbbbb] text-[11px] uppercase tracking-widest">
-            © {new Date().getFullYear()} Eduardo Manlangit Jr.
+            © {new Date().getFullYear()} Eduardo.
           </p>
         </div>
       </footer>
