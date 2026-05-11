@@ -29,7 +29,7 @@ RUN bun run build
 FROM node:22-alpine AS runner
 WORKDIR /app
 
-RUN npm install -g pm2
+RUN apk add --no-cache curl && npm install -g pm2
 
 # Install only production deps via bun, then run with Node/PM2
 COPY --from=builder /app/node_modules ./node_modules
