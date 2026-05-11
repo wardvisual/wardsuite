@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { collection, query, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, query, onSnapshot, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '@/src/lib/firebase';
-
 import { Product } from '@/src/types';
 
 export function useProducts() {
@@ -10,21 +9,22 @@ export function useProducts() {
 
   useEffect(() => {
     const q = query(collection(db, 'products'));
-    const unsubscribe = onSnapshot(q, 
+    const unsubscribe = onSnapshot(
+      q,
       (snapshot) => {
-        const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Product));
+        const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Product));
         setProducts(list);
         setLoading(false);
       },
       (error) => {
         handleFirestoreError(error, OperationType.LIST, 'products');
         setLoading(false);
-      }
+      },
     );
     return () => unsubscribe();
   }, []);
 
-  const addProduct = async (data: Omit<Product, 'id'>) => {
+  const addProduct = async (data: Omit<Product, 'id' | 'createdAt'>) => {
     try {
       await addDoc(collection(db, 'products'), {
         ...data,
@@ -35,5 +35,13 @@ export function useProducts() {
     }
   };
 
-  return { products, loading, addProduct };
+  const deleteProduct = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'products', id));
+    } catch (error) {
+      handleFirestoreError(error, OperationType.DELETE, 'products');
+    }
+  };
+
+  return { products, loading, addProduct, deleteProduct };
 }

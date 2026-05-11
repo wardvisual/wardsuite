@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Search, Filter, Edit2, Trash2, Loader2, ArrowLeft, Mail, Phone, MapPin, User, Hash } from 'lucide-react';
+import { Plus, Edit2, Trash2, Loader2, Mail, Phone, MapPin, User, Hash, Briefcase } from 'lucide-react';
 import { Supplier } from '@/src/types';
 import { cn } from '@/src/lib/utils';
 import { useSuppliers } from '@/src/hooks/useSuppliers';
