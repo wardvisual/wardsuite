@@ -1,27 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar } from './Sidebar';
+import { CommandPalette } from '@/src/components/ui/CommandPalette';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Bell, LogOut, Menu } from 'lucide-react';
+import { Search, Bell, Menu } from 'lucide-react';
 import { useAuthStore } from '@/src/store/auth.store';
-import { authApi } from '@/src/services/auth.api';
-import { useNavigate } from 'react-router-dom';
 
 interface ShellProps {
   children: React.ReactNode;
 }
 
 export function Shell({ children }: ShellProps) {
-  const { user, token, clearAuth } = useAuthStore();
-  const navigate = useNavigate();
+  const { user } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
-  const handleLogout = async () => {
-    if (token) {
-      try { await authApi.logout(token); } catch { /* swallow */ }
-    }
-    clearAuth();
-    navigate('/login');
-  };
+  // Ctrl+K global shortcut
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        setPaletteOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   const initials = user?.name
     ? user.name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()
@@ -32,44 +35,58 @@ export function Shell({ children }: ShellProps) {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <main className="flex-1 lg:ml-[280px] flex flex-col h-screen overflow-hidden bg-[#fcfcfc]">
-        <header className="h-20 lg:h-24 px-4 lg:px-12 flex items-center justify-between bg-white/50 backdrop-blur-xl shrink-0 sticky top-0 z-10">
-          <div className="flex items-center gap-3">
+        <header className="h-20 lg:h-24 px-4 lg:px-12 flex items-center justify-between gap-4 bg-white/50 backdrop-blur-xl shrink-0 sticky top-0 z-10">
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            title="Open menu"
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden p-2.5 rounded-xl hover:bg-[#f5f5f5] text-[#bbbbbb] hover:text-black transition-all shrink-0"
+          >
+            <Menu className="w-5 h-5" aria-hidden="true" />
+            <span className="sr-only">Open menu</span>
+          </button>
+
+          {/* Search bar — opens command palette */}
+          <div className="flex-1 max-w-2xl hidden sm:block">
             <button
               type="button"
-              title="Open menu"
-              onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2.5 rounded-xl hover:bg-[#f5f5f5] text-[#bbbbbb] hover:text-black transition-all"
+              onClick={() => setPaletteOpen(true)}
+              className="w-full flex items-center gap-3 pl-5 pr-4 h-14 bg-[#f5f5f5] hover:bg-white hover:border-[#eeeeee] border border-transparent rounded-[20px] text-base font-medium text-[#bbbbbb] transition-all text-left"
             >
-              <Menu className="w-5 h-5" aria-hidden="true" />
-              <span className="sr-only">Open menu</span>
+              <Search className="w-5 h-5 shrink-0" />
+              <span className="flex-1">Search pages...</span>
+              <kbd className="hidden lg:flex items-center gap-1 px-2 py-1 bg-white border border-[#eeeeee] rounded-lg text-[10px] font-black text-[#9ca3af] uppercase tracking-widest shadow-sm">
+                Ctrl K
+              </kbd>
             </button>
           </div>
 
-          <div className="flex-1 max-w-2xl hidden sm:block">
-            <div className="relative group">
-              <Search className="w-5 h-5 absolute left-6 top-1/2 -translate-y-1/2 text-[#bbbbbb]" />
-              <input
-                type="text"
-                placeholder="Search leads, deals, or contacts..."
-                className="w-full pl-16 pr-6 h-14 bg-[#f5f5f5] border border-transparent rounded-[20px] text-base font-medium focus:outline-none focus:bg-white focus:border-[#eeeeee] transition-all"
-              />
-            </div>
-          </div>
+          {/* Right actions */}
+          <div className="flex items-center gap-3 lg:gap-6 shrink-0">
+            {/* Mobile search icon */}
+            <button
+              type="button"
+              title="Search"
+              onClick={() => setPaletteOpen(true)}
+              className="sm:hidden p-2.5 rounded-xl hover:bg-[#f5f5f5] text-[#bbbbbb] hover:text-black transition-all"
+            >
+              <Search className="w-5 h-5" />
+            </button>
 
-          <div className="flex items-center gap-8">
-            <button type="button" className="relative p-3 hover:bg-white hover:shadow-sm rounded-2xl transition-all border border-transparent hover:border-[#f1f1f1]">
+            <button type="button" title="Notifications" className="relative p-3 hover:bg-white hover:shadow-sm rounded-2xl transition-all border border-transparent hover:border-[#f1f1f1]">
               <Bell className="w-6 h-6 text-[#bbbbbb]" />
               <span className="absolute top-3.5 right-3.5 w-2 h-2 bg-black rounded-full border-2 border-white" />
             </button>
 
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-3">
               <div className="text-right hidden xl:block">
                 <p className="text-base font-black text-black">{user?.name ?? 'User'}</p>
                 <p className="text-[10px] font-black text-[#bbbbbb] uppercase tracking-[0.2em]">
                   {user?.role ?? 'STAFF'}
                 </p>
               </div>
-              <div className="w-14 h-14 rounded-2xl bg-[#f5f5f5] border-2 border-white shadow-sm flex items-center justify-center font-black text-[#6b7280] text-lg overflow-hidden">
+              <div className="w-11 h-11 lg:w-14 lg:h-14 rounded-2xl bg-[#f5f5f5] border-2 border-white shadow-sm flex items-center justify-center font-black text-[#6b7280] text-base overflow-hidden">
                 <img
                   src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(user?.name ?? 'user')}`}
                   alt={user?.name ?? 'User'}
@@ -80,14 +97,6 @@ export function Shell({ children }: ShellProps) {
                   }}
                 />
               </div>
-              <button
-                type="button"
-                onClick={handleLogout}
-                title="Sign out"
-                className="p-3 hover:bg-red-50 hover:text-red-500 rounded-2xl transition-all border border-transparent hover:border-red-100 text-[#bbbbbb]"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
             </div>
           </div>
         </header>
@@ -106,6 +115,8 @@ export function Shell({ children }: ShellProps) {
           </AnimatePresence>
         </div>
       </main>
+
+      <CommandPalette isOpen={paletteOpen} onClose={() => setPaletteOpen(false)} />
     </div>
   );
 }
