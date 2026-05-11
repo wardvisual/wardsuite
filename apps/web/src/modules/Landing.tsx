@@ -172,10 +172,10 @@ function LandingFooter() {
         </div>
         <div className="flex justify-between items-center border-[#f5f5f5] mt-16 pt-8 border-t">
           <p className="font-bold text-[#bbbbbb] text-[11px] uppercase tracking-widest">
-            © {new Date().getFullYear()} Eduardo Manlangit Jr. — Built as a personal ERP vision.
+            © {new Date().getFullYear()} Eduardo. — Built as a personal ERP vision.
           </p>
           <div className="flex items-center gap-6">
-            <a href="https://github.com/wardvisual/wardsuitepro" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 font-bold text-[#bbbbbb] text-[11px] hover:text-black uppercase tracking-widest transition-colors">
+            <a href="https://github.com/wardvisual/wardsuite" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 font-bold text-[#bbbbbb] text-[11px] hover:text-black uppercase tracking-widest transition-colors">
               <ExternalLink className="w-3 h-3" /> Open Source
             </a>
           </div>

@@ -4,7 +4,7 @@
 
 WardSuite is a modular Enterprise Resource Planning platform designed from personal experience with the gaps left by existing business software. My main focus is building a practical, connected system for growing operations — starting with CRM and Supply Chain, expanding into a full business operating system.
 
-![WardSuite ERP](/public/banner.jpg)
+![WardSuite ERP](https://raw.githubusercontent.com/wardvisual/wardsuite/refs/heads/main/public/banner.jpg?token=GHSAT0AAAAAACMTPIR2IDRJFBIJ3K2UMPQK2QBTSVQ)
 
 ---
 
