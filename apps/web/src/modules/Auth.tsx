@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Mail, Lock, Zap, ArrowRight, Github, Chrome, User, Building, ArrowLeft, Loader2 } from 'lucide-react';
+import { Mail, Lock, ArrowRight, User, Building, ArrowLeft, Loader2 } from 'lucide-react';
+import { Logo } from '@/src/components/ui/Logo';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '@/src/store/auth.store';
 import { authApi } from '@/src/services/auth.api';
@@ -50,12 +51,7 @@ export default function Auth() {
   return (
     <div className="flex lg:flex-row flex-col bg-white min-h-screen font-sans overflow-hidden">
       <div className="relative flex flex-col justify-between bg-white p-12 lg:p-24 lg:w-[50%]">
-        <div className="flex items-center gap-3">
-          <div className="flex justify-center items-center bg-black rounded-full w-10 h-10">
-            <Zap className="w-6 h-6 text-white fill-white" />
-          </div>
-          <span className="font-bold text-black text-xl tracking-tight">WardSuite</span>
-        </div>
+        <Logo size="sm" />
 
         <div className="max-w-xl">
           <h1 className="mb-8 font-black text-[64px] text-black lg:text-[84px] leading-[1.0] tracking-tight">
@@ -212,7 +208,7 @@ export default function Auth() {
                   )}
                 </button>
               </form>
-
+{/* 
               {mode === 'login' && (
                 <>
                   <div className="relative flex justify-center items-center py-4">
@@ -230,7 +226,7 @@ export default function Auth() {
                     </button>
                   </div>
                 </>
-              )}
+              )} */}
 
               <div className="space-y-4 pt-6 text-center">
                 {mode === 'login' ? (
