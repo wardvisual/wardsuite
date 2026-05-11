@@ -1,8 +1,9 @@
-import { motion } from 'motion/react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
   ArrowRight, CheckCircle, Shield, Zap, BarChart3, PlayCircle,
   Target, DollarSign, Users, TrendingUp, Calendar, ArrowUpRight,
-  Github, ExternalLink, LayoutGrid, BookOpen,
+  Github, ExternalLink, LayoutGrid, BookOpen, X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Logo } from '@/src/components/ui/Logo';
@@ -170,7 +171,7 @@ function LandingFooter() {
             ))}
           </div>
         </div>
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 border-[#f5f5f5] mt-16 pt-8 border-t">
+        <div className="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-4 border-[#f5f5f5] mt-16 pt-8 border-t">
           <p className="font-bold text-[#bbbbbb] text-[11px] uppercase tracking-widest">
             © {new Date().getFullYear()} Eduardo. — Built as a personal ERP vision.
           </p>
@@ -185,9 +186,59 @@ function LandingFooter() {
   );
 }
 
+function DemoModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="relative bg-white rounded-[28px] overflow-hidden shadow-2xl max-w-4xl w-full"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#f1f1f1]">
+              <div className="flex items-center gap-3">
+                <PlayCircle className="w-5 h-5 text-[#6b7280]" />
+                <span className="font-bold text-sm text-[#111111]">WardSuite — Product Demo</span>
+              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close demo"
+                className="p-2 hover:bg-[#f5f5f5] rounded-xl transition-colors text-[#6b7280] hover:text-black"
+              >
+                <X className="w-4 h-4" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="p-2">
+              <img
+                src="/demo.gif"
+                alt="WardSuite product demo"
+                className="w-full rounded-2xl"
+              />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function Landing() {
+  const [demoOpen, setDemoOpen] = useState(false);
+
   return (
     <div className="bg-white min-h-screen overflow-hidden">
+      <DemoModal open={demoOpen} onClose={() => setDemoOpen(false)} />
       <nav className="top-0 right-0 left-0 z-50 floating-card fixed bg-white/80 backdrop-blur-md border-b">
         <div className="flex justify-between items-center mx-auto px-6 max-w-7xl h-20">
           <Logo size="xs" />
@@ -260,6 +311,7 @@ export default function Landing() {
 
     <button
       type="button"
+      onClick={() => setDemoOpen(true)}
       className="flex items-center gap-2 border-[#e5e7eb] bg-white hover:bg-gray-50 px-8 py-4 border rounded-full font-bold text-base text-black transition-all"
     >
       <PlayCircle className="w-5 h-5" />
