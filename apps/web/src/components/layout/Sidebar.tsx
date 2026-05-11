@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Settings,
@@ -16,6 +16,8 @@ import {
 import { cn } from '@/src/lib/utils';
 import { motion } from 'motion/react';
 import { Logo } from '@/src/components/ui/Logo';
+import { useAuthStore } from '@/src/store/auth.store';
+import { authApi } from '@/src/services/auth.api';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
@@ -34,6 +36,18 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
+  const { token, clearAuth } = useAuthStore();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    if (token) {
+      try { await authApi.logout(token); } catch { /* swallow */ }
+    }
+    clearAuth();
+    onClose?.();
+    navigate('/login');
+  };
+
   return (
     <>
       {/* Mobile overlay */}
@@ -107,7 +121,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           <Settings className="w-5 h-5" />
           <span className="font-bold text-base">Settings</span>
         </NavLink>
-        <button type="button" className="flex items-center gap-4 px-4 rounded-[20px] w-full h-14 text-[#bbbbbb] text-left hover:text-red-500 transition-all group">
+        <button type="button" onClick={handleLogout} className="flex items-center gap-4 px-4 rounded-[20px] w-full h-14 text-[#bbbbbb] text-left hover:text-red-500 transition-all group">
           <LogOut className="group-hover:scale-110 w-5 h-5 transition-transform" />
           <span className="font-bold text-base">Logout</span>
         </button>
