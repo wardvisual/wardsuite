@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    name: SSH deploy → wardsuite.cloud
+    name: SSH deploy → suite.wardvisual.com
     runs-on: ubuntu-latest
 
     steps:

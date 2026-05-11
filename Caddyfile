@@ -1,7 +1,12 @@
-wardsuite.cloud {
+suite.wardvisual.com {
 	reverse_proxy app:3000
 }
 
-www.wardsuite.cloud {
-	redir https://wardsuite.cloud{uri} permanent
+www.suite.wardvisual.com {
+	redir https://suite.wardvisual.com{uri} permanent
+}
+
+# Temporary: serve via IP for testing — remove once domain DNS is live
+:80 {
+	reverse_proxy app:3000
 }
