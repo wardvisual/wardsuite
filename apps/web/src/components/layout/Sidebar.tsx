@@ -26,8 +26,8 @@ const navItems = [
   { icon: Target, label: 'Pipeline', path: '/pipeline' },
   { icon: Layers, label: 'Deals', path: '/category' },
   { icon: MessageSquare, label: 'Activities', path: '/activity' },
-  { icon: BarChart3, label: 'Analytics', path: '/dashboard/analytics' },
-  { icon: CreditCard, label: 'Billing', path: '/dashboard/billing' },
+  { icon: BarChart3, label: 'Analytics', path: '/analytics' },
+  { icon: CreditCard, label: 'Billing', path: '/billing' },
 ];
 
 interface SidebarProps {
