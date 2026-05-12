@@ -23,7 +23,7 @@ const columns = (
     cell: ({ row }) => (
       <div>
         <p className="font-bold text-[#111111]">{row.original.name}</p>
-        <p className="text-[10px] text-[#6b7280] font-bold uppercase tracking-widest">{row.original.code}</p>
+        <p className="font-bold text-[#6b7280] text-[10px] uppercase tracking-widest">{row.original.code}</p>
       </div>
     ),
   },
@@ -63,16 +63,16 @@ const columns = (
   {
     id: 'actions',
     cell: ({ row }) => (
-      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
+      <div className="flex justify-end items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
         <button
           onClick={e => { e.stopPropagation(); onEdit(row.original); }}
-          className="p-2 hover:bg-white rounded-xl border border-transparent hover:border-[#f1f1f1] text-[#6b7280] hover:text-black transition-all"
+          className="hover:border-[#f1f1f1] hover:bg-white p-2 border border-transparent rounded-xl text-[#6b7280] hover:text-black transition-all"
         >
           <Edit2 className="w-4 h-4" />
         </button>
         <button
           onClick={e => { e.stopPropagation(); onDelete(row.original); }}
-          className="p-2 hover:bg-red-50 rounded-xl border border-transparent hover:border-red-100 text-[#6b7280] hover:text-red-600 transition-all"
+          className="hover:bg-red-50 p-2 border border-transparent hover:border-red-100 rounded-xl text-[#6b7280] hover:text-red-600 transition-all"
         >
           <Trash2 className="w-4 h-4" />
         </button>
@@ -146,10 +146,10 @@ export default function Customers() {
 
   return (
     <div className="space-y-10">
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div className="flex sm:flex-row flex-col justify-between sm:items-end gap-4">
         <div className="space-y-2">
-          <h2 className="text-2xl sm:text-[42px] font-bold tracking-tight text-[#111111] leading-[1.1]">Customers</h2>
-          <p className="text-[#6b7280] text-sm sm:text-lg font-medium">Manage your global accounts and enterprise partnerships.</p>
+          <h2 className="font-bold text-[#111111] text-2xl sm:text-[42px] leading-[1.1] tracking-tight">Customers</h2>
+          <p className="font-medium text-[#6b7280] text-sm sm:text-lg">Manage your global accounts and enterprise partnerships.</p>
         </div>
         <button onClick={openCreate} className="btn-primary shrink-0">
           <Plus className="w-5 h-5" />
@@ -158,9 +158,9 @@ export default function Customers() {
       </div>
 
       <div className="relative max-w-sm">
-        <Search className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[#6b7280]" />
+        <Search className="top-1/2 left-4 absolute w-4 h-4 text-[#6b7280] -translate-y-1/2" />
         <input
-          className="input-theme pl-11 w-full"
+          className="pl-11 w-full input-theme"
           placeholder="Search by name, company or email…"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
@@ -168,12 +168,12 @@ export default function Customers() {
       </div>
 
       {error && (
-        <div className="p-4 bg-red-50 border border-red-100 rounded-2xl text-sm text-red-700">{error}</div>
+        <div className="bg-red-50 p-4 border border-red-100 rounded-2xl text-red-700 text-sm">{error}</div>
       )}
 
       {loading ? (
-        <div className="flex items-center justify-center py-24 text-[#6b7280]">
-          <Loader2 className="w-6 h-6 animate-spin mr-3" />Loading customers…
+        <div className="flex justify-center items-center py-24 text-[#6b7280]">
+          <Loader2 className="mr-3 w-6 h-6 animate-spin" />Loading customers…
         </div>
       ) : (
         <DataTable columns={columns(openEdit, openDelete)} data={filtered} searchTerm="" onRowClick={openEdit} />
@@ -185,8 +185,8 @@ export default function Customers() {
         title={selected ? 'Account Details' : 'Onboard Customer'}
         footer={
           <div className="flex gap-3">
-            <button onClick={closeDrawer} disabled={saving} className="btn-secondary flex-1">Cancel</button>
-            <button form="customer-form" type="submit" disabled={saving} className="btn-primary flex-1">
+            <button onClick={closeDrawer} disabled={saving} className="flex-1 btn-secondary">Cancel</button>
+            <button form="customer-form" type="submit" disabled={saving} className="flex-1 btn-primary">
               {saving && <Loader2 className="w-4 h-4 animate-spin" />}
               {selected ? 'Save Changes' : 'Create Customer'}
             </button>
