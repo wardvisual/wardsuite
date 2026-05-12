@@ -22,3 +22,14 @@ export function resolveActor(req: Request): string {
   const parts = token.split('_');
   return parts[parts.length - 1] ?? 'system';
 }
+
+export function resolveIP(req: Request): string {
+  const forwarded = req.headers['x-forwarded-for'];
+  if (typeof forwarded === 'string') return forwarded.split(',')[0].trim();
+  return req.socket?.remoteAddress ?? req.ip ?? 'unknown';
+}
+
+export function resolveActorName(req: Request): string {
+  const user = (req as any).user;
+  return user?.name ?? 'System';
+}
