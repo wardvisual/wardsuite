@@ -8,12 +8,17 @@ const VALID_TYPES = ['call', 'meeting', 'note', 'email'];
 
 router.get('/', async (req: Request, res: Response) => {
   const { relatedEntity, relatedEntityId, type } = req.query;
-  const data = await activitiesService.getAll(
+  const limit = Math.min(Number(req.query.limit ?? 50), 200);
+  const offset = Number(req.query.offset ?? 0);
+
+  const { items, total } = await activitiesService.getAll(
     relatedEntity as string,
     relatedEntityId as string,
     type as string,
+    limit,
+    offset,
   );
-  res.json(ok(data, 'Activities fetched successfully', { total: data.length }));
+  res.json(ok(items, 'Activities fetched successfully', { total, limit, offset }));
 });
 
 router.post('/', async (req: Request, res: Response) => {

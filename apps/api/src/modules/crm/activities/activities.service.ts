@@ -1,14 +1,16 @@
 import { db } from '@server/core/database/firestore.client';
-import { Activity, CreateActivityDto } from './activities.dto';
+import { Activity, AuditAction, CreateActivityDto } from './activities.dto';
 
 const COLLECTION = 'crm_activities';
 
 interface AuditOptions {
   relatedEntity?: string;
   relatedEntityId: string;
-  action: 'created' | 'updated' | 'deleted' | 'converted' | 'stage_changed';
+  action: AuditAction;
   actorId: string;
+  actorName?: string;
   summary: string;
+  ipAddress?: string;
 }
 
 function toActivity(id: string, data: FirebaseFirestore.DocumentData): Activity {
@@ -18,14 +20,22 @@ function toActivity(id: string, data: FirebaseFirestore.DocumentData): Activity 
 class ActivitiesService {
   private col = db.collection(COLLECTION);
 
-  async getAll(relatedEntity?: string, relatedEntityId?: string, type?: string): Promise<Activity[]> {
-    let query: FirebaseFirestore.Query = this.col.orderBy('createdAt', 'desc');
-    if (relatedEntity) query = query.where('relatedEntity', '==', relatedEntity);
-    if (relatedEntityId) query = query.where('relatedEntityId', '==', relatedEntityId);
-    if (type) query = query.where('type', '==', type);
+  async getAll(
+    relatedEntity?: string,
+    relatedEntityId?: string,
+    type?: string,
+    limit = 50,
+    offset = 0,
+  ): Promise<{ items: Activity[]; total: number }> {
+    // Fetch all then filter in-memory to avoid composite index requirements.
+    const snap = await this.col.orderBy('createdAt', 'desc').get();
+    let results = snap.docs.map(d => toActivity(d.id, d.data()));
+    if (relatedEntity) results = results.filter(a => a.relatedEntity === relatedEntity);
+    if (relatedEntityId) results = results.filter(a => a.relatedEntityId === relatedEntityId);
+    if (type) results = results.filter(a => a.type === type);
 
-    const snap = await query.get();
-    return snap.docs.map(d => toActivity(d.id, d.data()));
+    const total = results.length;
+    return { items: results.slice(offset, offset + limit), total };
   }
 
   async create(dto: CreateActivityDto): Promise<Activity> {
@@ -33,8 +43,11 @@ class ActivitiesService {
       relatedEntity: dto.relatedEntity,
       relatedEntityId: dto.relatedEntityId,
       type: dto.type,
+      ...(dto.action && { action: dto.action }),
       description: dto.description,
       createdBy: dto.createdBy ?? 'system',
+      createdByName: dto.createdByName ?? dto.createdBy ?? 'System',
+      ipAddress: dto.ipAddress ?? 'unknown',
       createdAt: new Date().toISOString(),
     };
     const ref = await this.col.add(data);
@@ -46,8 +59,11 @@ class ActivitiesService {
       relatedEntity: opts.relatedEntity ?? 'system',
       relatedEntityId: opts.relatedEntityId,
       type: 'audit',
+      action: opts.action,
       description: opts.summary,
       createdBy: opts.actorId,
+      createdByName: opts.actorName,
+      ipAddress: opts.ipAddress,
     });
   }
 
