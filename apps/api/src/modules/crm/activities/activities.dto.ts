@@ -1,5 +1,3 @@
-// ─── Entity ──────────────────────────────────────────────────────────────────
-
 export type ActivityType = 'call' | 'meeting' | 'note' | 'email' | 'audit';
 
 export type AuditAction =
@@ -17,13 +15,11 @@ export interface Activity {
   type: ActivityType;
   action?: AuditAction;
   description: string;
-  createdBy: string;
-  createdByName?: string;
+  actorName: string;
+  actorEmail: string;
   ipAddress?: string;
   createdAt: string;
 }
-
-// ─── Request DTOs ─────────────────────────────────────────────────────────────
 
 export interface CreateActivityDto {
   relatedEntity: string;
@@ -31,7 +27,7 @@ export interface CreateActivityDto {
   type: ActivityType;
   action?: AuditAction;
   description: string;
-  createdBy?: string;
-  createdByName?: string;
+  actorName?: string;
+  actorEmail?: string;
   ipAddress?: string;
 }

@@ -1,4 +1,5 @@
 import { db } from '@server/core/database/firestore.client';
+import { authService } from '@server/modules/auth/auth.service';
 import { Activity, AuditAction, CreateActivityDto } from './activities.dto';
 
 const COLLECTION = 'crm_activities';
@@ -9,12 +10,28 @@ interface AuditOptions {
   action: AuditAction;
   actorId: string;
   actorName?: string;
+  actorEmail?: string;
   summary: string;
   ipAddress?: string;
 }
 
 function toActivity(id: string, data: FirebaseFirestore.DocumentData): Activity {
   return { id, ...data } as Activity;
+}
+
+// Resolve display name + email for legacy entries that used a user ID as createdBy.
+function resolveActor(raw: Activity): Activity {
+  if (raw.actorName) return raw;
+  // Legacy field: createdBy held the actor ID or raw name
+  const legacy = (raw as any).createdBy as string | undefined;
+  if (!legacy) return { ...raw, actorName: 'System', actorEmail: '' };
+  // If it looks like a user ID (u1, u2…), look it up
+  const user = authService.getUserById(legacy);
+  return {
+    ...raw,
+    actorName: user?.name ?? (raw as any).createdByName ?? legacy,
+    actorEmail: user?.email ?? (raw as any).createdByEmail ?? '',
+  };
 }
 
 class ActivitiesService {
@@ -27,7 +44,6 @@ class ActivitiesService {
     limit = 50,
     offset = 0,
   ): Promise<{ items: Activity[]; total: number }> {
-    // Fetch all then filter in-memory to avoid composite index requirements.
     const snap = await this.col.orderBy('createdAt', 'desc').get();
     let results = snap.docs.map(d => toActivity(d.id, d.data()));
     if (relatedEntity) results = results.filter(a => a.relatedEntity === relatedEntity);
@@ -35,7 +51,8 @@ class ActivitiesService {
     if (type) results = results.filter(a => a.type === type);
 
     const total = results.length;
-    return { items: results.slice(offset, offset + limit), total };
+    const page = results.slice(offset, offset + limit).map(resolveActor);
+    return { items: page, total };
   }
 
   async create(dto: CreateActivityDto): Promise<Activity> {
@@ -45,8 +62,8 @@ class ActivitiesService {
       type: dto.type,
       ...(dto.action && { action: dto.action }),
       description: dto.description,
-      createdBy: dto.createdBy ?? 'system',
-      createdByName: dto.createdByName ?? dto.createdBy ?? 'System',
+      actorName: dto.actorName ?? 'System',
+      actorEmail: dto.actorEmail ?? '',
       ipAddress: dto.ipAddress ?? 'unknown',
       createdAt: new Date().toISOString(),
     };
@@ -61,8 +78,8 @@ class ActivitiesService {
       type: 'audit',
       action: opts.action,
       description: opts.summary,
-      createdBy: opts.actorId,
-      createdByName: opts.actorName,
+      actorName: opts.actorName,
+      actorEmail: opts.actorEmail,
       ipAddress: opts.ipAddress,
     });
   }
