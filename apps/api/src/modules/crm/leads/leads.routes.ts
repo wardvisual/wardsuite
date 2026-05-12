@@ -3,7 +3,7 @@ import { leadsService } from './leads.service';
 import { customersService } from '@server/modules/crm/customers/customers.service';
 import { activitiesService } from '@server/modules/crm/activities/activities.service';
 import { ok, fail } from '@server/core/utils/response';
-import { resolveActor, resolveActorName, resolveIP } from '@server/core/middleware/auth.middleware';
+import { resolveActor, resolveActorName, resolveActorEmail, resolveIP } from '@server/core/middleware/auth.middleware';
 
 const router = Router();
 
@@ -31,6 +31,7 @@ router.post('/', async (req: Request, res: Response) => {
     action: 'created',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Lead "${item.fullName}" (${item.code}) created from source: ${item.source}.`,
   });
@@ -55,6 +56,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     action: 'updated',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: changes.length
       ? `Lead "${before.fullName}" updated — ${changes.join('; ')}.`
@@ -75,6 +77,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     action: 'deleted',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Lead "${lead.fullName}" (${lead.code}) deleted.`,
   });
@@ -105,6 +108,7 @@ router.post('/:id/convert', async (req: Request, res: Response) => {
     action: 'converted',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Lead "${lead.fullName}" converted to customer (${customer.code}).`,
   });

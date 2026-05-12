@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { customersService } from './customers.service';
 import { activitiesService } from '@server/modules/crm/activities/activities.service';
 import { ok, fail } from '@server/core/utils/response';
-import { resolveActor, resolveActorName, resolveIP } from '@server/core/middleware/auth.middleware';
+import { resolveActor, resolveActorName, resolveActorEmail, resolveIP } from '@server/core/middleware/auth.middleware';
 
 const router = Router();
 
@@ -29,6 +29,7 @@ router.post('/', async (req: Request, res: Response) => {
     action: 'created',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Customer "${item.name}" (${item.code}) at ${item.company} created.`,
   });
@@ -53,6 +54,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     action: 'updated',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: changes.length
       ? `Customer "${before.name}" updated — ${changes.join('; ')}.`
@@ -72,6 +74,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     action: 'deleted',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Customer "${item.name}" (${item.code}) deleted.`,
   });

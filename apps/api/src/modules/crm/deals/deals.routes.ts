@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { dealsService } from './deals.service';
 import { activitiesService } from '@server/modules/crm/activities/activities.service';
 import { ok, fail } from '@server/core/utils/response';
-import { resolveActor, resolveActorName, resolveIP } from '@server/core/middleware/auth.middleware';
+import { resolveActor, resolveActorName, resolveActorEmail, resolveIP } from '@server/core/middleware/auth.middleware';
 
 const VALID_STAGES = ['open', 'negotiation', 'proposal', 'won', 'lost'];
 
@@ -31,6 +31,7 @@ router.post('/', async (req: Request, res: Response) => {
     action: 'created',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Deal "${item.title}" (${item.code}) created — $${Number(item.amount).toLocaleString()} at stage "${item.stage}".`,
   });
@@ -57,6 +58,7 @@ router.put('/:id', async (req: Request, res: Response) => {
     action: 'updated',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: changes.length
       ? `Deal "${before.title}" updated — ${changes.join('; ')}.`
@@ -82,6 +84,7 @@ router.patch('/:id/stage', async (req: Request, res: Response) => {
     action: 'stage_changed',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Deal "${before.title}" moved from "${before.stage}" → "${stage}".`,
   });
@@ -99,6 +102,7 @@ router.delete('/:id', async (req: Request, res: Response) => {
     action: 'deleted',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Deal "${deal.title}" (${deal.code}) deleted — was valued at $${deal.amount.toLocaleString()}.`,
   });

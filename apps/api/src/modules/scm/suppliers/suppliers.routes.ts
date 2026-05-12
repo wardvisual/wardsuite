@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { suppliersService } from './suppliers.service';
 import { activitiesService } from '@server/modules/crm/activities/activities.service';
-import { requireAuth, resolveActor, resolveActorName, resolveIP } from '@server/core/middleware/auth.middleware';
+import { requireAuth, resolveActor, resolveActorName, resolveActorEmail, resolveIP } from '@server/core/middleware/auth.middleware';
 import { ok, fail } from '@server/core/utils/response';
 
 const router = Router();
@@ -29,6 +29,7 @@ router.post('/', requireAuth, async (req: Request, res: Response) => {
     action: 'created',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Supplier "${item.name}" (${item.code}) created — contact: ${item.contactPerson}.`,
   });
@@ -52,6 +53,7 @@ router.put('/:id', requireAuth, async (req: Request, res: Response) => {
     action: 'updated',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: changes.length
       ? `Supplier "${item.name}" updated — ${changes.join('; ')}.`
@@ -71,6 +73,7 @@ router.delete('/:id', requireAuth, async (req: Request, res: Response) => {
     action: 'deleted',
     actorId: resolveActor(req),
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `Supplier "${item.name}" (${item.code}) deleted.`,
   });

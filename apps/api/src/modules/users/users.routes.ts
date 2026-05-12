@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { usersService } from './users.service';
 import { authService } from '@server/modules/auth/auth.service';
 import { activitiesService } from '@server/modules/crm/activities/activities.service';
-import { requireAuth, resolveIP, resolveActorName } from '@server/core/middleware/auth.middleware';
+import { requireAuth, resolveIP, resolveActorName, resolveActorEmail } from '@server/core/middleware/auth.middleware';
 import { ok, fail } from '@server/core/utils/response';
 
 const router = Router();
@@ -36,6 +36,7 @@ router.put('/me', requireAuth, async (req: Request, res: Response) => {
     action: 'updated',
     actorId: authUser.id,
     actorName: resolveActorName(req),
+    actorEmail: resolveActorEmail(req),
     ipAddress: resolveIP(req),
     summary: `User profile updated — name: "${profile.name}", timezone: "${profile.timezone ?? 'unchanged'}".`,
   });
