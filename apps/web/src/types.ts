@@ -92,8 +92,8 @@ export interface Activity {
   type: 'call' | 'meeting' | 'note' | 'email' | 'audit';
   action?: 'created' | 'updated' | 'deleted' | 'converted' | 'stage_changed' | 'logged';
   description: string;
-  createdBy: string;
-  createdByName?: string;
+  actorName: string;
+  actorEmail: string;
   ipAddress?: string;
   createdAt: string;
 }

@@ -125,7 +125,8 @@ export function AuditItem({ log, index, isLast }: Props) {
   const entityType = ENTITY_LABEL[log.relatedEntity] ?? log.relatedEntity;
   const entityName = extractEntityName(log.description);
   const title = `${entityType} ${cfg.label}`;
-  const displayName = log.createdByName ?? log.createdBy ?? 'System';
+  const displayName = log.actorName || 'System';
+  const displayEmail = log.actorEmail || '';
 
   return (
     <motion.div
@@ -177,9 +178,14 @@ export function AuditItem({ log, index, isLast }: Props) {
           <p className="text-sm sm:text-base text-[#374151] leading-relaxed">{log.description}</p>
 
           <div className="mt-4 flex flex-wrap items-center gap-4 text-xs font-bold text-[#9ca3af] uppercase tracking-wider">
-            <div className="flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5" />
-              <span className="text-[#6b7280]">{displayName}</span>
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                <User className="w-3.5 h-3.5 text-[#6b7280]" />
+              </div>
+              <div className="flex flex-col leading-tight normal-case tracking-normal">
+                <span className="text-[#111111] font-bold text-xs">{displayName}</span>
+                {displayEmail && <span className="text-[#9ca3af] font-medium text-[10px]">{displayEmail}</span>}
+              </div>
             </div>
             {log.ipAddress && log.ipAddress !== 'unknown' && (
               <div className="flex items-center gap-1.5">

@@ -22,13 +22,14 @@ const FILTER_OPTIONS: { value: ActionFilter; label: string }[] = [
 ];
 
 function exportCSV(activities: Activity[]) {
-  const headers = ['ID', 'Entity', 'Action', 'Description', 'Actor', 'IP Address', 'Date/Time'];
+  const headers = ['ID', 'Entity', 'Action', 'Description', 'Actor Name', 'Actor Email', 'IP Address', 'Date/Time'];
   const rows = activities.map(a => [
     a.id,
     a.relatedEntity,
     a.action ?? '',
     `"${(a.description ?? '').replace(/"/g, '""')}"`,
-    a.createdByName ?? a.createdBy,
+    a.actorName || 'System',
+    a.actorEmail || '',
     a.ipAddress ?? 'unknown',
     new Date(a.createdAt).toLocaleString(),
   ]);
@@ -62,7 +63,8 @@ export default function ActivityLogs() {
       r = r.filter(a =>
         a.description.toLowerCase().includes(q) ||
         a.relatedEntity.toLowerCase().includes(q) ||
-        (a.createdByName ?? a.createdBy ?? '').toLowerCase().includes(q) ||
+        (a.actorName ?? '').toLowerCase().includes(q) ||
+        (a.actorEmail ?? '').toLowerCase().includes(q) ||
         (a.ipAddress ?? '').includes(q),
       );
     }
