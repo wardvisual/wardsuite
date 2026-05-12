@@ -63,6 +63,13 @@ class AuthService {
     const { password: _pw, ...user } = found;
     return user;
   }
+
+  getUserById(id: string): User | null {
+    const found = DEMO_USERS.find(u => u.id === id);
+    if (!found) return null;
+    const { password: _pw, ...user } = found;
+    return user;
+  }
 }
 
 export const authService = new AuthService();
