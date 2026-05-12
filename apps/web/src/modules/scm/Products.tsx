@@ -140,10 +140,10 @@ export default function Products() {
         </button>
       </div>
 
-      <DataTable 
-        columns={columns} 
-        data={products} 
-        searchTerm={searchTerm}
+      <DataTable
+        columns={columns}
+        data={products}
+        showSearch
         onRowClick={handleEdit}
       />
 

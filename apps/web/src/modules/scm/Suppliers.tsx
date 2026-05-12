@@ -121,10 +121,10 @@ export default function Suppliers() {
         </button>
       </div>
 
-      <DataTable 
-        columns={columns} 
-        data={suppliers} 
-        searchTerm={searchTerm}
+      <DataTable
+        columns={columns}
+        data={suppliers}
+        showSearch
         onRowClick={handleEdit}
       />
 
