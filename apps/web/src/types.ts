@@ -90,8 +90,11 @@ export interface Activity {
   relatedEntity: string;
   relatedEntityId: string;
   type: 'call' | 'meeting' | 'note' | 'email' | 'audit';
+  action?: 'created' | 'updated' | 'deleted' | 'converted' | 'stage_changed' | 'logged';
   description: string;
   createdBy: string;
+  createdByName?: string;
+  ipAddress?: string;
   createdAt: string;
 }
 
