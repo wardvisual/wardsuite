@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { customersService } from './customers.service';
 import { activitiesService } from '@server/modules/crm/activities/activities.service';
 import { ok, fail } from '@server/core/utils/response';
-import { resolveActor } from '@server/core/middleware/auth.middleware';
+import { resolveActor, resolveActorName, resolveIP } from '@server/core/middleware/auth.middleware';
 
 const router = Router();
 
@@ -28,6 +28,8 @@ router.post('/', async (req: Request, res: Response) => {
     relatedEntityId: item.id,
     action: 'created',
     actorId: resolveActor(req),
+    actorName: resolveActorName(req),
+    ipAddress: resolveIP(req),
     summary: `Customer "${item.name}" (${item.code}) at ${item.company} created.`,
   });
   res.status(201).json(ok(item, 'Customer created successfully'));
@@ -50,6 +52,8 @@ router.put('/:id', async (req: Request, res: Response) => {
     relatedEntityId: req.params.id,
     action: 'updated',
     actorId: resolveActor(req),
+    actorName: resolveActorName(req),
+    ipAddress: resolveIP(req),
     summary: changes.length
       ? `Customer "${before.name}" updated — ${changes.join('; ')}.`
       : `Customer "${before.name}" updated.`,
@@ -67,6 +71,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
     relatedEntityId: req.params.id,
     action: 'deleted',
     actorId: resolveActor(req),
+    actorName: resolveActorName(req),
+    ipAddress: resolveIP(req),
     summary: `Customer "${item.name}" (${item.code}) deleted.`,
   });
   res.json(ok(null, 'Customer deleted successfully'));

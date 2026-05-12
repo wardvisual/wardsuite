@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { dealsService } from './deals.service';
 import { activitiesService } from '@server/modules/crm/activities/activities.service';
 import { ok, fail } from '@server/core/utils/response';
-import { resolveActor } from '@server/core/middleware/auth.middleware';
+import { resolveActor, resolveActorName, resolveIP } from '@server/core/middleware/auth.middleware';
 
 const VALID_STAGES = ['open', 'negotiation', 'proposal', 'won', 'lost'];
 
@@ -30,6 +30,8 @@ router.post('/', async (req: Request, res: Response) => {
     relatedEntityId: item.id,
     action: 'created',
     actorId: resolveActor(req),
+    actorName: resolveActorName(req),
+    ipAddress: resolveIP(req),
     summary: `Deal "${item.title}" (${item.code}) created — $${Number(item.amount).toLocaleString()} at stage "${item.stage}".`,
   });
   res.status(201).json(ok(item, 'Deal created successfully'));
@@ -54,6 +56,8 @@ router.put('/:id', async (req: Request, res: Response) => {
     relatedEntityId: req.params.id,
     action: 'updated',
     actorId: resolveActor(req),
+    actorName: resolveActorName(req),
+    ipAddress: resolveIP(req),
     summary: changes.length
       ? `Deal "${before.title}" updated — ${changes.join('; ')}.`
       : `Deal "${before.title}" updated.`,
@@ -77,6 +81,8 @@ router.patch('/:id/stage', async (req: Request, res: Response) => {
     relatedEntityId: req.params.id,
     action: 'stage_changed',
     actorId: resolveActor(req),
+    actorName: resolveActorName(req),
+    ipAddress: resolveIP(req),
     summary: `Deal "${before.title}" moved from "${before.stage}" → "${stage}".`,
   });
 
@@ -92,6 +98,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
     relatedEntityId: req.params.id,
     action: 'deleted',
     actorId: resolveActor(req),
+    actorName: resolveActorName(req),
+    ipAddress: resolveIP(req),
     summary: `Deal "${deal.title}" (${deal.code}) deleted — was valued at $${deal.amount.toLocaleString()}.`,
   });
   res.json(ok(null, 'Deal deleted successfully'));
