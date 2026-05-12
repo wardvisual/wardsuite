@@ -33,3 +33,8 @@ export function resolveActorName(req: Request): string {
   const user = (req as any).user;
   return user?.name ?? 'System';
 }
+
+export function resolveActorEmail(req: Request): string {
+  const user = (req as any).user;
+  return user?.email ?? '';
+}
