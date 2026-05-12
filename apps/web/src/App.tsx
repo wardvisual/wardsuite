@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Package, Briefcase, Loader2, Target, DollarSign, Users, TrendingUp, Calendar, ArrowUpRight } from 'lucide-react';
+import { leadsApi } from './services/crm/leads.api';
+import { Lead } from './types';
 import { Shell } from './components/layout/Shell';
 import { AuthGuard } from './components/auth/AuthGuard';
 import Suppliers from './modules/scm/Suppliers';
@@ -68,10 +70,24 @@ const PERIOD_OPTIONS = [
   { label: 'Last 12 months',value: '12m' },
 ];
 
+const STATUS_COLOR: Record<Lead['status'], string> = {
+  new:       'bg-gray-50   text-gray-500',
+  contacted: 'bg-blue-50   text-blue-600',
+  qualified: 'bg-green-50  text-green-600',
+  proposal:  'bg-orange-50 text-orange-500',
+  won:       'bg-black     text-white',
+  lost:      'bg-red-50    text-red-500',
+};
+
 const Dashboard = () => {
   const { stats, loading } = useDashboardStats();
   const [period, setPeriod] = useState('30d');
   const [showPeriodMenu, setShowPeriodMenu] = useState(false);
+  const [recentLeads, setRecentLeads] = useState<Lead[]>([]);
+
+  useEffect(() => {
+    leadsApi.list().then(r => setRecentLeads(r.data.slice(0, 3))).catch(() => {});
+  }, []);
 
   if (loading) {
     return (
@@ -177,37 +193,35 @@ const Dashboard = () => {
           <div className="floating-card p-6 lg:p-8 flex-1 relative overflow-hidden">
             <div className="flex items-center gap-3 mb-8">
               <Calendar className="w-5 h-5" />
-              <h3 className="text-[20px] font-bold">Recent Flow</h3>
+              <h3 className="text-[20px] font-bold">Recent Leads</h3>
             </div>
             <div className="space-y-6">
-              {[
-                { name: 'Edward', handle: 'EDWARDTECH', amount: '$3,999.00', status: 'NEW', initial: 'E' },
-                { name: 'Sarah', handle: 'SJ_CORP', amount: '$12,400.00', status: 'PAID', initial: 'S' },
-                { name: 'Orion Ltd', handle: 'ORION_SCM', amount: '$850.00', status: 'NEW', initial: 'O' },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center justify-between">
+              {recentLeads.length === 0 ? (
+                <p className="text-sm text-[#bbbbbb] text-center py-4">No leads yet</p>
+              ) : recentLeads.map(lead => (
+                <div key={lead.id} className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-[#f8f8f8] flex items-center justify-center font-bold text-[#6b7280]">
-                      {item.initial}
+                    <div className="w-12 h-12 rounded-2xl bg-gray-50 border border-[#f8f8f8] flex items-center justify-center font-bold text-[#6b7280] uppercase text-sm">
+                      {lead.fullName.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-bold">{item.name}</p>
-                      <p className="text-[10px] text-[#9ca3af] font-bold uppercase tracking-widest">{item.handle}</p>
+                      <p className="text-sm font-bold">{lead.fullName}</p>
+                      <p className="text-[10px] text-[#9ca3af] font-bold uppercase tracking-widest">{lead.company}</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold">{item.amount}</p>
-                    <span className="text-[9px] font-black uppercase text-[#6b7280] tracking-tighter bg-gray-50 px-2 py-1 rounded-full">
-                      {item.status}
+                    <p className="text-[10px] font-bold text-[#6b7280] uppercase tracking-widest mb-1">{lead.source}</p>
+                    <span className={`text-[9px] font-black uppercase tracking-tighter px-2 py-1 rounded-full ${STATUS_COLOR[lead.status]}`}>
+                      {lead.status}
                     </span>
                   </div>
                 </div>
               ))}
             </div>
-            <button type="button" className="w-full mt-12 py-3 bg-gray-50 border border-[#f1f1f1] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors">
-              Audit Full Pipeline
+            <a href="/crm/leads" className="w-full mt-8 py-3 bg-gray-50 border border-[#f1f1f1] rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-gray-100 transition-colors">
+              View All Leads
               <ArrowUpRight className="w-4 h-4 opacity-50" />
-            </button>
+            </a>
           </div>
         </div>
       </div>
